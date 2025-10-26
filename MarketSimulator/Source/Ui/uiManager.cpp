@@ -9,6 +9,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
+#include "imgui/implot.h"
 #include "Ui/Window/chartWindow.h"
 
 
@@ -45,6 +46,7 @@ void UiManager::InitImGui()
     // Setup ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.IniFilename = nullptr;    // Erase previous potentially saved configs
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -286,6 +288,7 @@ void UiManager::Update()
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
     glfwTerminate();
 }
