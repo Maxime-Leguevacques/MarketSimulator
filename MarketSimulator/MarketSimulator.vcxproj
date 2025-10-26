@@ -79,6 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>$(ExternalIncludePath);$(_ZVcpkgCurrentInstalledDir)include;$(ProjectDir)External</ExternalIncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -86,6 +87,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <ExternalIncludePath>$(ExternalIncludePath);$(_ZVcpkgCurrentInstalledDir)include;$(ProjectDir)External</ExternalIncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)Include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -168,7 +170,10 @@
     <ClCompile Include="External\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External\imgui\imgui_tables.cpp" />
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Ui\uiManager.cpp" />
+    <ClCompile Include="Source\Ui\Window\chartWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\glad\glad.h" />
@@ -184,6 +189,11 @@
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="External\KHR\khrplatform.h" />
+    <ClInclude Include="Include\app.h" />
+    <ClInclude Include="Include\Ui\uiManager.h" />
+    <ClInclude Include="Include\Ui\window.h" />
+    <ClInclude Include="Include\Ui\Window\chartWindow.h" />
+    <ClInclude Include="Include\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
