@@ -10,12 +10,12 @@ void ImplotWrapper::PlotCandlestick(
     const double* _opens,
     const double* _closes, 
     const double* _lows, 
-    const double* _highs, 
-    int _count, 
-    bool _tooltip, 
-    float _widthPercent,
-    ImVec4 _bullCol, 
-    ImVec4 _bearCol)
+    const double* _highs,
+    const int _count,
+    const bool _tooltip,
+    const float _widthPercent,
+    const ImVec4 _bullCol,
+    const ImVec4 _bearCol)
 {
     // get ImGui window DrawList
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
@@ -35,13 +35,12 @@ void ImplotWrapper::PlotCandlestick(
         drawList->AddRectFilled(ImVec2(toolL, toolT), ImVec2(toolR, toolB), IM_COL32(128,128,128,64));
         ImPlot::PopPlotClipRect();
         // find mouse location index
-        int idx = BinarySearch(_xs, 0, _count - 1, mouse.x);
         // render tool tip (won't be affected by plot clip rect)
-        if (idx != -1)
+        if (const int idx = BinarySearch(_xs, 0, _count - 1, mouse.x); idx != -1)
         {
             ImGui::BeginTooltip();
             char buff[32];
-            ImPlot::FormatDate(ImPlotTime::FromDouble(_xs[idx]),buff,32,ImPlotDateFmt_DayMoYr,ImPlot::GetStyle().UseISO8601);
+            ImPlot::FormatDate(ImPlotTime::FromDouble(_xs[idx]), buff, 32, ImPlotDateFmt_DayMoYr, false);
             ImGui::Text("Day:   %s",  buff);
             ImGui::Text("Open:  $%.2f", _opens[idx]);
             ImGui::Text("Close: $%.2f", _closes[idx]);
