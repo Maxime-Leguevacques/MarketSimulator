@@ -177,6 +177,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Ui\uiManager.cpp" />
     <ClCompile Include="Source\Ui\Window\chartWindow.cpp" />
+    <ClCompile Include="Source\Wrapper\implotWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\glad\glad.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Include\Ui\window.h" />
     <ClInclude Include="Include\Ui\Window\chartWindow.h" />
     <ClInclude Include="Include\utils.h" />
+    <ClInclude Include="Include\Wrapper\implotWrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
