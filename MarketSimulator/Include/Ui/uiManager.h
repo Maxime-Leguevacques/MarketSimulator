@@ -13,6 +13,12 @@ struct Vector2
     float y;
 };
 
+struct Vector2Int
+{
+    int x;
+    int y;
+};
+
 
 class UiManager
 {
@@ -20,7 +26,7 @@ private:
     static std::vector<Window*> windows_;
     
 public:
-    static Vector2 screenSize;
+    static Vector2Int screenSize;
     static std::string windowName;
     static GLFWwindow* mainWindow;
 

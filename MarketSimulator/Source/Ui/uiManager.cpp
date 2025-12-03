@@ -13,7 +13,7 @@
 #include "Ui/Window/chartWindow.h"
 
 
-Vector2 UiManager::screenSize = { 0.0f, 0.0f };
+Vector2Int UiManager::screenSize = { 0, 0 };
 std::string UiManager::windowName = "Market Simulator";
 GLFWwindow* UiManager::mainWindow = nullptr;
 std::vector<Window*> UiManager::windows_;
@@ -21,18 +21,21 @@ std::vector<Window*> UiManager::windows_;
 
 void UiManager::InitWindow()
 {
-    // Get screen dimensions
-    RECT desktop;
-    const HWND hDesktop = GetDesktopWindow();
-    GetWindowRect(hDesktop, &desktop);
-    
-    screenSize = { static_cast<float>(desktop.right), static_cast<float>(desktop.bottom) };
-
     // Init window
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    mainWindow = glfwCreateWindow(static_cast<int>(screenSize.x), static_cast<int>(screenSize.y), windowName.c_str(), nullptr, nullptr);
+    glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
+    // Get primary monitor
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    // monitor dimensions
+    screenSize = { mode->width, mode->height };
+    
+    mainWindow = glfwCreateWindow(screenSize.x, screenSize.y, windowName.c_str(), nullptr, nullptr);
     if (mainWindow == nullptr)
     {
         std::cerr << Utils::messageTypeError << "Failed to create GLFW window: " << windowName << std::endl;
@@ -255,7 +258,7 @@ void UiManager::Init()
 void UiManager::Update()
 {
     const ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
+    glViewport(0, 0, screenSize.x, screenSize.y);
 
     while (!glfwWindowShouldClose(mainWindow))
     {
@@ -299,6 +302,6 @@ Window* UiManager::GetWindowByName(const std::string& _name)
         if (window->name == _name)
             return window;
     
-    std::cerr << Utils::messageTypeError << "No window with the name: " << _name.c_str() << " has been found"; 
+    std::cerr << Utils::messageTypeError << "No window with the name: " << _name.c_str() << " has been found" << std::endl; 
     return nullptr;
 }

@@ -23,8 +23,7 @@ void ChartWindow::Update()
     ImGui::Begin(name.c_str());
 
     // Do stuff here
-    // if (ImPlot::BeginPlot("Candlestick Chart", ImVec2(800, 900)))
-    if (ImPlot::BeginPlot("Candlestick Chart", ImVec2(1800,800)))
+    if (ImPlot::BeginPlot("Candlestick Chart", ImGui::GetContentRegionAvail()))
     {
         ImPlot::SetupAxes(nullptr, nullptr, 0, ImPlotAxisFlags_AutoFit|ImPlotAxisFlags_RangeFit);
         ImPlot::SetupAxesLimits(1546300800, 1571961600, 1250, 1600);
