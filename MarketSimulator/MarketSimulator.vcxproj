@@ -196,6 +196,8 @@
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="External\KHR\khrplatform.h" />
     <ClInclude Include="Include\app.h" />
+    <ClInclude Include="Include\Common\bars.h" />
+    <ClInclude Include="Include\Common\utils.h" />
     <ClInclude Include="Include\Ui\uiManager.h" />
     <ClInclude Include="Include\Ui\window.h" />
     <ClInclude Include="Include\Ui\Window\chartWindow.h" />

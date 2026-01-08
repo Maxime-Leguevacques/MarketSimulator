@@ -1,10 +1,11 @@
 ﻿#include "Wrapper/implotWrapper.h"
 
+#include "Common/bars.h"
 #include "imgui/implot.h"
 #include "imgui/implot_internal.h"
 
 
-void ImplotWrapper::PlotCandlestick(
+void ImplotWrapper::PlotCandlestickOld(
     const char* _labelId, 
     const double* _xs, 
     const double* _opens,
@@ -54,7 +55,7 @@ void ImplotWrapper::PlotCandlestick(
     if (ImPlot::BeginItem(_labelId))
     {
         // override legend icon color
-        ImPlot::GetCurrentItem()->Color = IM_COL32(64,64,64,255);
+        ImPlot::GetCurrentItem()->Color = IM_COL32(64, 64, 64, 255);
         // fit data if requested
         if (ImPlot::FitThisFrame())
             for (int i = 0; i < _count; ++i) {
@@ -70,6 +71,78 @@ void ImplotWrapper::PlotCandlestick(
             ImVec2 lowPos   = ImPlot::PlotToPixels(_xs[i], _lows[i]);
             ImVec2 highPos  = ImPlot::PlotToPixels(_xs[i], _highs[i]);
             const ImU32 color = ImGui::GetColorU32(_opens[i] > _closes[i] ? _bearCol : _bullCol);
+            drawList->AddLine(lowPos, highPos, color);
+            drawList->AddRectFilled(openPos, closePos, color);
+        }
+
+        // end plot item
+        ImPlot::EndItem();
+    }
+}
+
+void ImplotWrapper::PlotCandlestickNew(
+    const char* _labelId, 
+    const std::span<Bar> _bars,
+    const double* _dates,
+    const int _count,
+    const bool _tooltip,
+    const float _widthPercent,
+    const ImVec4 _bullCol,
+    const ImVec4 _bearCol)
+{
+    // get ImGui window DrawList
+    ImDrawList* drawList = ImPlot::GetPlotDrawList();
+    // calc real value width
+    const double halfWidth = _count > 1 ? (_bars[1].t - _bars[0].t) * _widthPercent : _widthPercent;
+
+    // custom tool
+    if (ImPlot::IsPlotHovered() && _tooltip)
+    {
+        ImPlotPoint mouse       = ImPlot::GetPlotMousePos();
+        mouse.x                 = ImPlot::RoundTime(ImPlotTime::FromDouble(mouse.x), ImPlotTimeUnit_Day).ToDouble();
+        const float  toolL      = ImPlot::PlotToPixels(mouse.x - halfWidth * 1.5, mouse.y).x;
+        const float  toolR      = ImPlot::PlotToPixels(mouse.x + halfWidth * 1.5, mouse.y).x;
+        const float  toolT      = ImPlot::GetPlotPos().y;
+        const float  toolB      = toolT + ImPlot::GetPlotSize().y;
+        ImPlot::PushPlotClipRect();
+        drawList->AddRectFilled(ImVec2(toolL, toolT), ImVec2(toolR, toolB), IM_COL32(128,128,128,64));
+        ImPlot::PopPlotClipRect();
+        // find mouse location index
+        // render tool tip (won't be affected by plot clip rect)
+        if (const int idx = BinarySearch(_dates, 0, _count - 1, mouse.x); idx != -1)
+        {
+            ImGui::BeginTooltip();
+            char buff[32];
+            ImPlot::FormatDate(ImPlotTime::FromDouble(_bars[idx].t), buff, 32, ImPlotDateFmt_DayMoYr, false);
+            ImGui::Text("Day:   %s",  buff);
+            ImGui::Text("Open:  $%.2f", _bars[idx].o);
+            ImGui::Text("High:  $%.2f", _bars[idx].h);
+            ImGui::Text("Low:   $%.2f", _bars[idx].l);
+            ImGui::Text("Close: $%.2f", _bars[idx].c);
+            ImGui::EndTooltip();
+        }
+    }
+
+    // begin plot item
+    if (ImPlot::BeginItem(_labelId))
+    {
+        // override legend icon color
+        ImPlot::GetCurrentItem()->Color = IM_COL32(64, 64, 64, 255);
+        // fit data if requested
+        if (ImPlot::FitThisFrame())
+            for (int i = 0; i < _count; ++i) {
+                ImPlot::FitPoint(ImPlotPoint(_bars[i].t, _bars[i].l));
+                ImPlot::FitPoint(ImPlotPoint(_bars[i].t, _bars[i].h));
+            }
+        
+        // render data
+        for (int i = 0; i < _count; ++i)
+        {
+            ImVec2 openPos  = ImPlot::PlotToPixels(_bars[i].t - halfWidth, _bars[i].o);
+            ImVec2 closePos = ImPlot::PlotToPixels(_bars[i].t + halfWidth, _bars[i].c);
+            ImVec2 lowPos   = ImPlot::PlotToPixels(_bars[i].t, _bars[i].l);
+            ImVec2 highPos  = ImPlot::PlotToPixels(_bars[i].t, _bars[i].h);
+            const ImU32 color = ImGui::GetColorU32(_bars[i].o > _bars[i].c ? _bearCol : _bullCol);
             drawList->AddLine(lowPos, highPos, color);
             drawList->AddRectFilled(openPos, closePos, color);
         }

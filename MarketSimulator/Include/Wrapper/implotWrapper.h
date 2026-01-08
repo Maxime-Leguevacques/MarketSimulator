@@ -1,5 +1,10 @@
 ﻿#pragma once
+#include <span>
+
 #include "imgui/imgui.h"
+
+
+struct Bar;
 
 
 class ImplotWrapper
@@ -21,15 +26,26 @@ private:
     }
     
 public:
-    static void PlotCandlestick(const char* _labelId, 
-    const double* _xs, 
-    const double* _opens, 
-    const double* _closes, 
-    const double* _lows, 
-    const double* _highs, 
-    int _count, 
-    bool _tooltip, 
-    float _widthPercent, 
-    ImVec4 _bullCol, 
-    ImVec4 _bearCol);
+    static void PlotCandlestickOld(
+        const char* _labelId, 
+        const double* _xs, 
+        const double* _opens, 
+        const double* _closes, 
+        const double* _lows, 
+        const double* _highs, 
+        int _count, 
+        bool _tooltip, 
+        float _widthPercent, 
+        ImVec4 _bullCol, 
+        ImVec4 _bearCol);
+
+    static void PlotCandlestickNew(
+        const char* _labelId, 
+        const std::span<Bar> _bars,
+        const double* _dates,
+        int _count, 
+        bool _tooltip, 
+        float _widthPercent, 
+        ImVec4 _bullCol, 
+        ImVec4 _bearCol);
 };
