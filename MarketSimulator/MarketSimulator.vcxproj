@@ -175,6 +175,7 @@
     <ClCompile Include="External\imgui\implot_items.cpp" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\serializer.cpp" />
     <ClCompile Include="Source\Ui\uiManager.cpp" />
     <ClCompile Include="Source\Ui\Window\chartWindow.cpp" />
     <ClCompile Include="Source\Wrapper\implotWrapper.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Include\app.h" />
     <ClInclude Include="Include\Common\bars.h" />
     <ClInclude Include="Include\Common\utils.h" />
+    <ClInclude Include="Include\serializer.h" />
     <ClInclude Include="Include\Ui\uiManager.h" />
     <ClInclude Include="Include\Ui\window.h" />
     <ClInclude Include="Include\Ui\Window\chartWindow.h" />
