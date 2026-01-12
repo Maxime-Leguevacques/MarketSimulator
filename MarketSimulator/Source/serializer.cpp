@@ -6,9 +6,6 @@
 #include "SQLite/sqlite3.h"
 
 
-#define 
-
-
 void Serializer::CreateDatabase(const std::filesystem::path& _path)
 {
     sqlite3* db;
