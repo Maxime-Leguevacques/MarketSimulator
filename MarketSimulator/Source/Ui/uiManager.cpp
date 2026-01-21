@@ -3,21 +3,19 @@
 #include <iostream>
 #include <wtypes.h>
 
-#include "utils.h"
+#include "Common/utils.h"
 #include "GLFW/glfw3.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/implot.h"
-#include "Ui/Window/chartWindow.h"
+#include "Ui/Window/marketWindow.h"
 
 
-Vector2Int UiManager::screenSize = { 0, 0 };
-std::string UiManager::windowName = "Market Simulator";
-GLFWwindow* UiManager::mainWindow = nullptr;
-std::vector<Window*> UiManager::windows_;
+UiManager::UiManager() = default;
 
+UiManager::~UiManager() = default;
 
 void UiManager::InitWindow()
 {
@@ -231,8 +229,6 @@ void UiManager::BeginDockSpace()
         ImGui::DockBuilderFinish(dockspaceId);
     }
 #pragma endregion Create_dockspace
-
-    UpdateWindows();
 }
 
 void UiManager::EndDockSpace()
@@ -240,17 +236,19 @@ void UiManager::EndDockSpace()
     ImGui::End();
 }
 
-void UiManager::UpdateWindows()
+void UiManager::UpdateWindows(Market* _market)
 {
     for (const auto& window : windows_)
-        window->Update();
+        window->Update(_market);
 }
 
-void UiManager::Init()
+void UiManager::Init(Market* _market)
 {
+    market_ = _market;
+    
     InitWindow();
 
-    windows_.push_back(new ChartWindow("ChartWindow"));
+    windows_.push_back(new MarketWindow("ChartWindow"));
 
     InitImGui();
 }
@@ -272,6 +270,9 @@ void UiManager::Update()
         ImGui::NewFrame();
 
         BeginDockSpace();
+
+        market_->Update();
+        UpdateWindows(market_);
 
         EndDockSpace();
 

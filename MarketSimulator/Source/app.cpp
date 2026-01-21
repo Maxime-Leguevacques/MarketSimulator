@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Ui/uiManager.h"
-
 
 App::App()
 {
@@ -12,18 +10,20 @@ App::App()
 #else
     isInExe = true;
 #endif
-    
+
     std::cout << "Running in " << (isInExe ? "release." : "debug.") << std::endl;
 }
 
-App::~App() {}
+App::~App() = default;
 
-void App::Start()
+void App::Init()
 {
-    UiManager::Init();
+    market_ = new Market();
+    
+    uiManager_.Init(market_);
 }
 
-void App::Run()
+void App::Update()
 {
-    UiManager::Update();
+    uiManager_.Update();
 }

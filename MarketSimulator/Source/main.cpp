@@ -7,6 +7,7 @@ int main()
 {
     App* app = new App();
     
-    app->Start();
-    app->Run();
+    app->Init();
+
+    app->Update();
 }

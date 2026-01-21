@@ -2,13 +2,18 @@
 
 #include <string>
 
+#include "Finance/market.h"
+
 
 class Window
 {
+protected:
+    ~Window() = default;
+
 public:
     std::string name;
 
 public:
-    Window(const std::string& _name) : name(_name) {}
-    virtual void Update() = 0;
+    explicit Window(std::string _name) : name(std::move(_name)) {}
+    virtual void Update(Market* _market) = 0;
 };

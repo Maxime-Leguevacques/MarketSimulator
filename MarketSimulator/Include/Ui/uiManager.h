@@ -4,6 +4,7 @@
 #include <string>
 
 #include "window.h"
+#include "Finance/market.h"
 #include "GLFW/glfw3.h"
 
 
@@ -23,35 +24,31 @@ struct Vector2Int
 class UiManager
 {
 private:
-    static std::vector<Window*> windows_;
+    Market* market_ = nullptr;
+    
+    std::vector<Window*> windows_;
     
 public:
-    static Vector2Int screenSize;
-    static std::string windowName;
-    static GLFWwindow* mainWindow;
+    Vector2Int screenSize;
+    std::string windowName;
+    GLFWwindow* mainWindow;
+
+public:
+    UiManager();
+    ~UiManager();
 
 private:
-    // Static class
-    UiManager() = delete;
-    UiManager(const UiManager&) = delete;
-    UiManager(UiManager&&) = delete;
-    UiManager& operator=(const UiManager&) = delete;
-    UiManager& operator=(UiManager&&) = delete;
-    ~UiManager() = delete;
+    void InitWindow();
+    void InitImGui();
+    void SetColorStyles();
 
-
-private:
-    static void InitWindow();
-    static void InitImGui();
-    static void SetColorStyles();
-
-    static void BeginDockSpace();
-    static void EndDockSpace();
-    static void UpdateWindows();
+    void BeginDockSpace();
+    void EndDockSpace();
+    void UpdateWindows(Market* _market);
     
 public:
-    static void Init();
-    static void Update();
+    void Init(Market* _market);
+    void Update();
 
-    static Window* GetWindowByName(const std::string& _name);
+    Window* GetWindowByName(const std::string& _name);
 };

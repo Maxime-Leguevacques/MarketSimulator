@@ -1,3 +1,6 @@
+// This class includes various useful members and methods useful throughout the project.
+
+
 #pragma once
 
 #include <string>
