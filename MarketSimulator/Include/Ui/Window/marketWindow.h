@@ -6,7 +6,7 @@
 class MarketWindow : public Window
 {
 private:
-    std::vector<double> dates;
+    std::vector<double> dates_;
     
 public:
     explicit MarketWindow(const std::string& _name);

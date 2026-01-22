@@ -31,7 +31,7 @@ void UiManager::InitWindow()
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     // monitor dimensions
-    screenSize = { mode->width, mode->height };
+    screenSize = {.x = mode->width, .y = mode->height };
     
     mainWindow = glfwCreateWindow(screenSize.x, screenSize.y, windowName.c_str(), nullptr, nullptr);
     if (mainWindow == nullptr)
@@ -80,14 +80,14 @@ void UiManager::SetColorStyles()
     ImVec4* colors = style.Colors;
     
     // Define your purple palette
-    ImVec4 color1 = ImVec4(0.13f, 0.10f, 0.18f, 1.0f); // Very dark purple
-    ImVec4 color2 = ImVec4(0.25f, 0.18f, 0.40f, 1.0f); // Dark purple
-    ImVec4 color3 = ImVec4(0.38f, 0.27f, 0.55f, 1.0f); // Mid purple
-    ImVec4 color4 = ImVec4(0.56f, 0.45f, 0.78f, 1.0f); // Light purple
-    ImVec4 color5 = ImVec4(0.72f, 0.62f, 0.95f, 1.0f); // Lavender (lightest)
+    constexpr ImVec4 color1 = ImVec4(0.13f, 0.10f, 0.18f, 1.0f); // Very dark purple
+    constexpr ImVec4 color2 = ImVec4(0.25f, 0.18f, 0.40f, 1.0f); // Dark purple
+    constexpr ImVec4 color3 = ImVec4(0.38f, 0.27f, 0.55f, 1.0f); // Mid purple
+    constexpr ImVec4 color4 = ImVec4(0.56f, 0.45f, 0.78f, 1.0f); // Light purple
+    constexpr ImVec4 color5 = ImVec4(0.72f, 0.62f, 0.95f, 1.0f); // Lavender (lightest)
     
     // Muted background to prevent eye strain
-    ImVec4 backgroundColor = ImVec4(0.08f, 0.06f, 0.12f, 1.0f);
+    constexpr ImVec4 backgroundColor = ImVec4(0.08f, 0.06f, 0.12f, 1.0f);
     
     // Backgrounds
     colors[ImGuiCol_WindowBg]            = backgroundColor;
@@ -162,9 +162,9 @@ void UiManager::SetColorStyles()
     colors[ImGuiCol_SeparatorActive]     = color5;
     
     // Navigation
-    colors[ImGuiCol_NavHighlight]        = color4;
-    colors[ImGuiCol_NavWindowingHighlight] = color5;
-    colors[ImGuiCol_NavWindowingDimBg]   = backgroundColor;
+    colors[ImGuiCol_NavHighlight]           = color4;
+    colors[ImGuiCol_NavWindowingHighlight]  = color5;
+    colors[ImGuiCol_NavWindowingDimBg]      = backgroundColor;
     
     // Optional: tweak rounding and padding
     style.FrameRounding = 5.0f;
