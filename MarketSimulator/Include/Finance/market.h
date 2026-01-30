@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <vector>
 
 #include "Common/bars.h"
@@ -13,12 +14,15 @@
 class Market
 {
 private:
-    uint32_t idx = 1767225600;
+    std::chrono::steady_clock::time_point lastUpdate_;
+    float timeAccumulator_ = 0.0f;
+
+    uint32_t idx_ = 1767225600;
     
 public:
-    std::vector<Bar> bars;
+    float tickSpeed = 10.0f;    // Bars per second
 
-    float tickspeed = 1.0f;
+    std::vector<Bar> bars;
     
 public:
     Market();

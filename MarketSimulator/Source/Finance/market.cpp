@@ -3,18 +3,30 @@
 #include <iostream>
 
 
-Market::Market() = default;
+Market::Market()
+{
+    lastUpdate_ = std::chrono::steady_clock::now();
+}
 
 Market::~Market() = default;
 
 void Market::Update()
 {
-    if (bars.size() < 10)
+    // Update timer to make market grow with tickSpeed
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    std::chrono::duration<float> delta = now - lastUpdate_;
+    lastUpdate_ = now;
+    timeAccumulator_ += delta.count();
+    const float secondsPerBar = 1.0f / tickSpeed;
+
+    while (timeAccumulator_ >= secondsPerBar && bars.size() < 100)
     {
         // Create new bar
-        const Bar bar = {idx, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
+        const Bar bar = {idx_, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
         bars.push_back(bar);
-        idx += 86400;
+        idx_ += 86400;
+
+        timeAccumulator_ -= secondsPerBar;
     }
     
     std::cout << bars.size() << std::endl;
