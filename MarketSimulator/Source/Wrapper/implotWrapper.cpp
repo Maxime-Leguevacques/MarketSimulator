@@ -21,7 +21,8 @@ void ImplotWrapper::PlotCandlestickOld(
     // get ImGui window DrawList
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // calc real value width
-    const double halfWidth = _count > 1 ? (_xs[1] - _xs[0]) * _widthPercent : _widthPercent;
+    // For single bar, use 1 day (86400 seconds) as default bar spacing
+    const double halfWidth = _count > 1 ? (_xs[1] - _xs[0]) * _widthPercent : 86400.0 * _widthPercent;
 
     // custom tool
     if (ImPlot::IsPlotHovered() && _tooltip)
@@ -93,7 +94,8 @@ void ImplotWrapper::PlotCandlestickNew(
     // get ImGui window DrawList
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // calc real value width
-    const double halfWidth = _count > 1 ? (_bars[1].t - _bars[0].t) * _widthPercent : _widthPercent;
+    // For single bar, use 1 day (86400 seconds) as default bar spacing
+    const double halfWidth = _count > 1 ? (_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;
 
     // custom tool
     if (ImPlot::IsPlotHovered() && _tooltip)
