@@ -6,23 +6,23 @@
 #pragma once
 
 #include <chrono>
-#include <vector>
 
-#include "Common/bars.h"
+#include "chart.h"
+#include "orderBook.h"
 
 
 class Market
 {
 private:
+    OrderBook* orderBook_ = nullptr;
+    Chart* chart_ = nullptr;
+    
+    
     std::chrono::steady_clock::time_point lastUpdate_;
     float timeAccumulator_ = 0.0f;
-
-    uint32_t idx_ = 1767225600;
     
 public:
     float tickSpeed = 1.0f;    // Bars per second
-
-    std::vector<Bar> bars;
     
 public:
     Market();
@@ -30,4 +30,7 @@ public:
 
 public:
     void Update();
+
+    OrderBook* GetOrderBook() const;
+    Chart* GetChart() const;
 };

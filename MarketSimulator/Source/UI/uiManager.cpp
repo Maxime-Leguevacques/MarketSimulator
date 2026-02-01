@@ -10,7 +10,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/implot.h"
-#include "UI/Window/marketWindow.h"
+#include "UI/Window/chartWindow.h"
 #include "UI/Window/orderBookWindow.h"
 
 
@@ -251,15 +251,14 @@ void UiManager::UpdateWindows(Market* _market)
         window->Update();
 }
 
-void UiManager::Init(Market* _market, OrderBook* _orderBook)
+void UiManager::Init(Market* _market)
 {
     market_ = _market;
-    orderBook_ = _orderBook;
     
     InitWindow();
 
-    windows_.push_back(new MarketWindow("Chart", _market));
-    windows_.push_back(new OrderBookWindow("OrderBook", _orderBook));
+    windows_.push_back(new OrderBookWindow("OrderBook", _market->GetOrderBook()));
+    windows_.push_back(new ChartWindow("Chart", _market->GetChart()));
 
     InitImGui();
 }

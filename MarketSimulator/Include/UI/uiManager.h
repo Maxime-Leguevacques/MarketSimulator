@@ -50,7 +50,7 @@ private:
     void UpdateWindows(Market* _market);
     
 public:
-    void Init(Market* _market, OrderBook* _orderBook);
+    void Init(Market* _market);
     void Update();
 
     Window* GetWindowByName(const std::string& _name);

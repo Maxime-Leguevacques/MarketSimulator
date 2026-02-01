@@ -1,29 +1,28 @@
-#include "UI/Window/marketWindow.h"
+#include "UI/Window/chartWindow.h"
 
-#include "Core/Common/bars.h"
 #include "imgui/imgui.h"
 #include "imgui/implot.h"
 #include "Wrapper/implotWrapper.h"
 
 
-MarketWindow::MarketWindow(const std::string& _name, Market* _market)
-    : Window(_name), market_(_market) {}
+ChartWindow::ChartWindow(const std::string& _name, Chart* _chart)
+    : Window(_name), chart_(_chart) {}
 
-MarketWindow::~MarketWindow() = default;
+ChartWindow::~ChartWindow() = default;
 
-void MarketWindow::Update()
+void ChartWindow::Update()
 {
     static size_t lastBarCount = 0;
 
-    if (market_->bars.size() > lastBarCount)
+    if (chart_->bars_.size() > lastBarCount)
     {
-        for (size_t i = lastBarCount; i < market_->bars.size(); ++i)
-            dates_.push_back(market_->bars[i].t);
+        for (size_t i = lastBarCount; i < chart_->bars_.size(); ++i)
+            dates_.push_back(chart_->bars_[i].t);
 
-        lastBarCount = market_->bars.size();
+        lastBarCount = chart_->bars_.size();
     }
 
-    if (market_->bars.empty())
+    if (chart_->bars_.empty())
         return;
     
     ImGui::Begin(name.c_str());
@@ -37,8 +36,8 @@ void MarketWindow::Update()
         ImPlot::SetupAxisScale(ImAxis_X1, ImPlotScale_Time);
     
         // Set initial axis limits to show the first N bars (or all loaded bars)
-        const double tStart = market_->bars[0].t;
-        const double tEnd = market_->bars[0].t + 60*60*24*7;    // show 1 week initially
+        const double tStart = chart_->bars_[0].t;
+        const double tEnd = chart_->bars_[0].t + 60*60*24*7;    // show 1 week initially
         ImPlot::SetupAxisLimits(ImAxis_X1, tStart, tEnd, ImPlotCond_Once);
     
         // Set Y-axis limits
@@ -47,9 +46,9 @@ void MarketWindow::Update()
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(
             "TEST",
-            market_->bars,
+            chart_->bars_,
             dates_,
-            static_cast<int>(market_->bars.size()),
+            static_cast<int>(chart_->bars_.size()),
             true,
             0.25f,
             ImVec4(0.000f, 1.000f, 0.441f, 1.000f),

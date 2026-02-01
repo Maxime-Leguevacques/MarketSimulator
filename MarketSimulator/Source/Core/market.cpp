@@ -4,6 +4,9 @@
 Market::Market()
 {
     lastUpdate_ = std::chrono::steady_clock::now();
+
+    orderBook_ = new OrderBook();
+    chart_ = new Chart();
 }
 
 Market::~Market() = default;
@@ -17,13 +20,28 @@ void Market::Update()
     timeAccumulator_ += delta.count();
     const float secondsPerBar = 1.0f / tickSpeed;
 
-    while (timeAccumulator_ >= secondsPerBar && bars.size() < 100)
+    while (timeAccumulator_ >= secondsPerBar)
     {
-        // Create new bar
-        const Bar bar = {idx_, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
-        bars.push_back(bar);
-        idx_ += 86400;
+        // // Create new bar
+        // const Bar bar = {idx_, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
+        // bars.push_back(bar);
+        // idx_ += 86400;
+
+        orderBook_->Update();
+        chart_->Update();
+
+        // Update chart
 
         timeAccumulator_ -= secondsPerBar;
     }
+}
+
+OrderBook* Market::GetOrderBook() const
+{
+    return orderBook_;
+}
+
+Chart* Market::GetChart() const
+{
+    return chart_;
 }
