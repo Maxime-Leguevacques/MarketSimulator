@@ -170,10 +170,15 @@
     <ClCompile Include="External\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External\imgui\imgui_tables.cpp" />
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="External\imgui\implot.cpp" />
+    <ClCompile Include="External\imgui\implot_demo.cpp" />
+    <ClCompile Include="External\imgui\implot_items.cpp" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\serializer.cpp" />
     <ClCompile Include="Source\Ui\uiManager.cpp" />
     <ClCompile Include="Source\Ui\Window\chartWindow.cpp" />
+    <ClCompile Include="Source\Wrapper\implotWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\glad\glad.h" />
@@ -185,15 +190,21 @@
     <ClInclude Include="External\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="External\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="External\imgui\imgui_internal.h" />
+    <ClInclude Include="External\imgui\implot.h" />
+    <ClInclude Include="External\imgui\implot_internal.h" />
     <ClInclude Include="External\imgui\imstb_rectpack.h" />
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="External\KHR\khrplatform.h" />
     <ClInclude Include="Include\app.h" />
+    <ClInclude Include="Include\Common\bars.h" />
+    <ClInclude Include="Include\Common\utils.h" />
+    <ClInclude Include="Include\serializer.h" />
     <ClInclude Include="Include\Ui\uiManager.h" />
     <ClInclude Include="Include\Ui\window.h" />
     <ClInclude Include="Include\Ui\Window\chartWindow.h" />
     <ClInclude Include="Include\utils.h" />
+    <ClInclude Include="Include\Wrapper\implotWrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
