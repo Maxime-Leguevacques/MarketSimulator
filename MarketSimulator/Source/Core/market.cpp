@@ -1,6 +1,4 @@
-﻿#include "Finance/market.h"
-
-#include <iostream>
+﻿#include "Core/market.h"
 
 
 Market::Market()
@@ -13,8 +11,8 @@ Market::~Market() = default;
 void Market::Update()
 {
     // Update timer to make market grow with tickSpeed
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    std::chrono::duration<float> delta = now - lastUpdate_;
+    const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    const std::chrono::duration<float> delta = now - lastUpdate_;
     lastUpdate_ = now;
     timeAccumulator_ += delta.count();
     const float secondsPerBar = 1.0f / tickSpeed;
@@ -28,6 +26,4 @@ void Market::Update()
 
         timeAccumulator_ -= secondsPerBar;
     }
-    
-    std::cout << bars.size() << std::endl;
 }

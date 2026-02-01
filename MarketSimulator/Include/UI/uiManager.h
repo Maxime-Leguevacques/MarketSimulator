@@ -4,7 +4,8 @@
 #include <string>
 
 #include "window.h"
-#include "Finance/market.h"
+#include "Core/market.h"
+#include "Core/orderBook.h"
 #include "GLFW/glfw3.h"
 
 
@@ -25,6 +26,7 @@ class UiManager
 {
 private:
     Market* market_ = nullptr;
+    OrderBook* orderBook_ = nullptr;
     
     std::vector<Window*> windows_;
     
@@ -44,10 +46,11 @@ private:
 
     void BeginDockSpace();
     void EndDockSpace();
+    void InitWindows();
     void UpdateWindows(Market* _market);
     
 public:
-    void Init(Market* _market);
+    void Init(Market* _market, OrderBook* _orderBook);
     void Update();
 
     Window* GetWindowByName(const std::string& _name);

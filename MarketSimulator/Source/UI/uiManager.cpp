@@ -1,4 +1,4 @@
-#include "Ui/uiManager.h"
+#include "UI/uiManager.h"
 
 #include <iostream>
 #include <wtypes.h>
@@ -10,7 +10,8 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/implot.h"
-#include "Ui/Window/marketWindow.h"
+#include "UI/Window/marketWindow.h"
+#include "UI/Window/orderBookWindow.h"
 
 
 UiManager::UiManager() = default;
@@ -222,9 +223,13 @@ void UiManager::BeginDockSpace()
         ImGui::DockBuilderSetNodeSize(dockspaceId, ImGui::GetMainViewport()->Size);
 
         // Create dockspace layout here
+        // Split window from [] to [dock_id_left | dock_id_right]
+        ImGuiID dockIdLeft, dockIdRight;
+        ImGui::DockBuilderSplitNode(dockspaceId, ImGuiDir_Left, 0.5f, &dockIdLeft, &dockIdRight);
         
         // Setup dockspace here
-        ImGui::DockBuilderDockWindow(GetWindowByName("ChartWindow")->name.c_str(), dockspaceId);
+        ImGui::DockBuilderDockWindow(GetWindowByName("Chart")->name.c_str(), dockIdLeft);
+        ImGui::DockBuilderDockWindow(GetWindowByName("OrderBook")->name.c_str(), dockIdRight);
 
         ImGui::DockBuilderFinish(dockspaceId);
     }
@@ -236,19 +241,25 @@ void UiManager::EndDockSpace()
     ImGui::End();
 }
 
+void UiManager::InitWindows()
+{
+}
+
 void UiManager::UpdateWindows(Market* _market)
 {
     for (const auto& window : windows_)
-        window->Update(_market);
+        window->Update();
 }
 
-void UiManager::Init(Market* _market)
+void UiManager::Init(Market* _market, OrderBook* _orderBook)
 {
     market_ = _market;
+    orderBook_ = _orderBook;
     
     InitWindow();
 
-    windows_.push_back(new MarketWindow("ChartWindow"));
+    windows_.push_back(new MarketWindow("Chart", _market));
+    windows_.push_back(new OrderBookWindow("OrderBook", _orderBook));
 
     InitImGui();
 }

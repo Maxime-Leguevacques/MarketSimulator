@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Finance/market.h"
-#include "Ui/uiManager.h"
+#include "Core/market.h"
+#include "Core/orderBook.h"
+#include "UI/uiManager.h"
 
 
 class App
 {
 private:
     Market* market_ = nullptr;
+    OrderBook* orderBook_ = nullptr;
     UiManager uiManager_;
     
 public:

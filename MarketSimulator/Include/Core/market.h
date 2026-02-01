@@ -20,7 +20,7 @@ private:
     uint32_t idx_ = 1767225600;
     
 public:
-    float tickSpeed = 10.0f;    // Bars per second
+    float tickSpeed = 1.0f;    // Bars per second
 
     std::vector<Bar> bars;
     

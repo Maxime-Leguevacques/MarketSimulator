@@ -6,7 +6,7 @@
 
 #include <filesystem>
 
-#include "Finance/Common/bars.h"
+#include "Core/Common/bars.h"
 
 
 class Serializer

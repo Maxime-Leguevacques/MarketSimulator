@@ -2,7 +2,7 @@
 
 #include "Wrapper/implotWrapper.h"
 
-#include "Finance/Common/bars.h"
+#include "Core/Common/bars.h"
 #include "imgui/implot.h"
 #include "imgui/implot_internal.h"
 

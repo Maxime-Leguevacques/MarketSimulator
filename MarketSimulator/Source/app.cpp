@@ -19,8 +19,9 @@ App::~App() = default;
 void App::Init()
 {
     market_ = new Market();
+    orderBook_ = new OrderBook();
     
-    uiManager_.Init(market_);
+    uiManager_.Init(market_, orderBook_);
 }
 
 void App::Update()
