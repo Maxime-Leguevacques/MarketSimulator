@@ -27,7 +27,9 @@ void ImplotWrapper::PlotCandlestick(
     // Get ImGui window DrawList
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // Calculate real value width
-    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : _widthPercent;
+    
+    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;    // Implot uses days as x value and there are 86400 seconds in a day.
+                                                                                                                                    // So we check if we are on first bar to use that seconds value or not
 
     // custom tool
     if (ImPlot::IsPlotHovered() && _tooltip)
