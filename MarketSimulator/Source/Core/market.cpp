@@ -1,5 +1,7 @@
 ﻿#include "Core/market.h"
 
+#include <iostream>
+
 
 Market::Market()
 {
@@ -22,15 +24,8 @@ void Market::Update()
 
     while (timeAccumulator_ >= secondsPerBar)
     {
-        // // Create new bar
-        // const Bar bar = {idx_, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
-        // bars.push_back(bar);
-        // idx_ += 86400;
-
         orderBook_->Update();
         chart_->Update();
-
-        // Update chart
 
         timeAccumulator_ -= secondsPerBar;
     }

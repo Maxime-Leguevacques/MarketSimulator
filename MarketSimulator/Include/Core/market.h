@@ -22,7 +22,7 @@ private:
     float timeAccumulator_ = 0.0f;
     
 public:
-    float tickSpeed = 1.0f;    // Bars per second
+    float tickSpeed = 2.0f;    // Bars per second
     
 public:
     Market();
