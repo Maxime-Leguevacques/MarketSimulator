@@ -3,7 +3,7 @@
 #include <deque>
 
 #include "Core/orderBook.h"
-#include "Core/Common/trader.h"
+#include "Core/Common/order.h"
 #include "UI/window.h"
 
 
@@ -21,8 +21,7 @@ class OrderBookWindow : public Window
 private:
     std::deque<SOrderRow> orderLog_;
 
-    
-    unsigned int tcount_ = 0;
+    unsigned int ocount_ = 0;
     OrderBook* orderBook_;
     
 public:
@@ -35,5 +34,5 @@ private:
 public:
     void Update() override;
 
-    void AddOrderToLog(const Trader& _trader);
+    void AddOrderToLog(const Order& _trader);
 };

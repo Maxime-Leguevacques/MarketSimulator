@@ -3,13 +3,9 @@
 #include <iostream>
 
 
-OrderBook::OrderBook()
-{
-}
+OrderBook::OrderBook() = default;
 
-OrderBook::~OrderBook()
-{
-}
+OrderBook::~OrderBook() = default;
 
 void OrderBook::Update()
 {
@@ -23,6 +19,16 @@ void OrderBook::AddBid(const unsigned int  _id, const double _price, const unsig
 void OrderBook::AddAsk(const unsigned int _id, const double _price, const unsigned int _quantity)
 {
     asks_[_price] += _quantity;
+}
+
+void OrderBook::AddOrder(const Order& _order)
+{
+    newOrders.push(_order);
+
+    // Add to order book
+    _order.GetDirection() == EDirection::buyer
+        ? AddBid(_order.GetId(), _order.GetTradePrice(), _order.GetQuantity())
+        : AddAsk(_order.GetId(), _order.GetTradePrice(), _order.GetQuantity());
 }
 
 void OrderBook::Print()

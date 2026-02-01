@@ -1,6 +1,6 @@
 ﻿#include "UI/Window/orderBookWindow.h"
 
-#include "Core/Common/trader.h"
+#include "Core/Common/order.h"
 #include "imgui/imgui.h"
 
 
@@ -13,45 +13,27 @@ OrderBookWindow::~OrderBookWindow() = default;
 
 void OrderBookWindow::TEMP_CreateNewOrder()
 {
-    const Trader trader(tcount_);
-    trader.Print();
+    const Order order(ocount_);
+    order.Print();
 
     // Add to order book
-    trader.GetDirection() == EDirection::buyer
-        ? orderBook_->AddBid(trader.GetId(), trader.GetTradePrice(), trader.GetQuantity())
-        : orderBook_->AddAsk(trader.GetId(), trader.GetTradePrice(), trader.GetQuantity());
-
-    AddOrderToLog(trader);
+    orderBook_->AddOrder(order);
+    AddOrderToLog(order);
         
-    tcount_++;
+    ocount_++;
 }
 
 void OrderBookWindow::Update()
 {
     ImGui::Begin(name.c_str());
 
-#pragma region Basic_buttons
-    if (ImGui::Button("new order"))
+    while (!orderBook_->newOrders.empty())
     {
-        const Trader trader(tcount_);
-        trader.Print();
-
-        // Add to order book
-        trader.GetDirection() == EDirection::buyer
-            ? orderBook_->AddBid(trader.GetId(), trader.GetTradePrice(), trader.GetQuantity())
-            : orderBook_->AddAsk(trader.GetId(), trader.GetTradePrice(), trader.GetQuantity());
-
-        AddOrderToLog(trader);
-        
-        tcount_++;
+        const Order& order = orderBook_->newOrders.front();
+        AddOrderToLog(order);
+        orderBook_->newOrders.pop();
     }
-
-    if (ImGui::Button("print order book"))
-    {
-        orderBook_->Print();
-    }
-#pragma endregion Basic_buttons
-
+    
 #pragma region Order_book_log
     ImGui::Separator();
     ImGui::Text("Order Log");
@@ -99,12 +81,30 @@ void OrderBookWindow::Update()
 
     ImGui::EndChild();
 #pragma endregion Order_book_log
+   
+#pragma region Basic_buttons
+    if (ImGui::Button("new order"))
+    {
+        const Order order(ocount_);
+        order.Print();
 
-    
+        // Add to order book
+        orderBook_->AddOrder(order);
+        AddOrderToLog(order);
+        
+        ocount_++;
+    }
+
+    if (ImGui::Button("print order book"))
+    {
+        orderBook_->Print();
+    }
+#pragma endregion Basic_buttons
+ 
     ImGui::End();
 }
 
-void OrderBookWindow::AddOrderToLog(const Trader& _trader)
+void OrderBookWindow::AddOrderToLog(const Order& _trader)
 {
     orderLog_.push_front({
         .traderId = _trader.GetId(),

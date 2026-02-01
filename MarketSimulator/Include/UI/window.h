@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "Core/market.h"
-
 
 class Window
 {

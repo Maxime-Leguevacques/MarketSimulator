@@ -2,6 +2,8 @@
 
 #include "UI/window.h"
 
+#include "Core/chart.h"
+
 
 class ChartWindow : public Window
 {

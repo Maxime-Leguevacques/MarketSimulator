@@ -14,22 +14,24 @@ enum EBehavior
 };
 
 
-class Trader
+class Order
 {
 private:
     unsigned int id_;
     EDirection direction_;
     EBehavior behavior_;
-    float tradePrice_;
+    double price_;
     unsigned int quantity_;
 
 public:
-    Trader();
-    Trader(unsigned int _id);
-    ~Trader();
+    Order();
+    Order(unsigned int _id);
+    ~Order();
 
 public:
     void Print() const;
+
+    void SetPrice(double _price);
 
     unsigned int GetId() const;
     EDirection GetDirection() const;

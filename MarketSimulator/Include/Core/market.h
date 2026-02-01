@@ -17,16 +17,21 @@ private:
     OrderBook* orderBook_ = nullptr;
     Chart* chart_ = nullptr;
     
-    
     std::chrono::steady_clock::time_point lastUpdate_;
     float timeAccumulator_ = 0.0f;
+
+    unsigned int ocount_ = 0;    // Temporary variable to store order index
     
 public:
-    float tickSpeed = 2.0f;    // Bars per second
+    float tickSpeed = 1.0f;    // Bars per second
+    double assetStartingPrice = 0.0f;
     
 public:
     Market();
     ~Market();
+
+private:
+    void TEMP_CreateNewOrder();
 
 public:
     void Update();

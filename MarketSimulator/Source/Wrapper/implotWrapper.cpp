@@ -28,9 +28,8 @@ void ImplotWrapper::PlotCandlestick(
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // Calculate real value width
     
-    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;    // Implot uses days as x value and there are 86400 seconds in a day.
+    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
                                                                                                                                     // So we check if we are on first bar to use that seconds value or not
-
     // custom tool
     if (ImPlot::IsPlotHovered() && _tooltip)
     {
@@ -43,10 +42,9 @@ void ImplotWrapper::PlotCandlestick(
         ImPlot::PushPlotClipRect();
         drawList->AddRectFilled(ImVec2(toolL, toolT), ImVec2(toolR, toolB), IM_COL32(128,128,128,64));
         ImPlot::PopPlotClipRect();
-        // find mouse location index
-        // render tool tip (won't be affected by plot clip rect)
-        const int idx = FindIndex(_dates, mouse.x);
 
+        // find mouse location index
+        const int idx = FindIndex(_dates, mouse.x);
         if (idx >= 0 && static_cast<size_t>(idx) < _bars.size())
         {
             ImGui::BeginTooltip();

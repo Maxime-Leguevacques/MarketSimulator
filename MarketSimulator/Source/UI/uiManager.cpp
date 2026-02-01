@@ -12,6 +12,7 @@
 #include "imgui/implot.h"
 #include "UI/Window/chartWindow.h"
 #include "UI/Window/orderBookWindow.h"
+#include "UI/Window/simulationSettingsWindow.h"
 
 
 UiManager::UiManager() = default;
@@ -225,11 +226,15 @@ void UiManager::BeginDockSpace()
         // Create dockspace layout here
         // Split window from [] to [dock_id_left | dock_id_right]
         ImGuiID dockIdLeft, dockIdRight;
-        ImGui::DockBuilderSplitNode(dockspaceId, ImGuiDir_Left, 0.5f, &dockIdLeft, &dockIdRight);
+        ImGui::DockBuilderSplitNode(dockspaceId, ImGuiDir_Left, 0.7f, &dockIdLeft, &dockIdRight);
+
+        ImGuiID dockIdMiddle;
+        ImGui::DockBuilderSplitNode(dockIdLeft, ImGuiDir_Left, 0.2f, &dockIdLeft, &dockIdMiddle);
         
         // Setup dockspace here
-        ImGui::DockBuilderDockWindow(GetWindowByName("Chart")->name.c_str(), dockIdLeft);
-        ImGui::DockBuilderDockWindow(GetWindowByName("OrderBook")->name.c_str(), dockIdRight);
+        ImGui::DockBuilderDockWindow(GetWindowByName("Simulation Settings")->name.c_str(), dockIdLeft);
+        ImGui::DockBuilderDockWindow(GetWindowByName("Candlestick Chart")->name.c_str(), dockIdMiddle);
+        ImGui::DockBuilderDockWindow(GetWindowByName("Order Book")->name.c_str(), dockIdRight);
 
         ImGui::DockBuilderFinish(dockspaceId);
     }
@@ -257,8 +262,9 @@ void UiManager::Init(Market* _market)
     
     InitWindow();
 
-    windows_.push_back(new OrderBookWindow("OrderBook", _market->GetOrderBook()));
-    windows_.push_back(new ChartWindow("Chart", _market->GetChart()));
+    windows_.push_back(new SimulationSettingsWindow("Simulation Settings", market_));
+    windows_.push_back(new OrderBookWindow("Order Book", _market->GetOrderBook()));
+    windows_.push_back(new ChartWindow("Candlestick Chart", _market->GetChart()));
 
     InitImGui();
 }

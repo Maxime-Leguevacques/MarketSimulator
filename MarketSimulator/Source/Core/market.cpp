@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Core/Common/order.h"
+
 
 Market::Market()
 {
@@ -12,6 +14,17 @@ Market::Market()
 }
 
 Market::~Market() = default;
+
+void Market::TEMP_CreateNewOrder()
+{
+    Order order(ocount_);
+    order.SetPrice(assetStartingPrice);
+
+    // Add to order book
+    orderBook_->AddOrder(order);
+
+    ocount_++;
+}
 
 void Market::Update()
 {
@@ -24,6 +37,7 @@ void Market::Update()
 
     while (timeAccumulator_ >= secondsPerBar)
     {
+        TEMP_CreateNewOrder();
         orderBook_->Update();
         chart_->Update();
 
