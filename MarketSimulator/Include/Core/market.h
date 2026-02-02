@@ -24,7 +24,7 @@ private:
     
 public:
     float tickSpeed = 1.0f;    // Bars per second
-    double assetStartingPrice = 0.0f;
+    double assetStartingPrice = 1.0f;
     
 public:
     Market();

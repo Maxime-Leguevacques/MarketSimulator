@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <span>
-#include <vector>
 
 #include "imgui/imgui.h"
 

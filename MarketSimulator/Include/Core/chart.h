@@ -7,6 +7,8 @@
 
 class Chart
 {
+    friend class ChartWindow;
+    
 private:
     std::vector<Bar> bars_;
 
@@ -18,6 +20,4 @@ public:
 
 public:
     void Update();
-
-    friend class ChartWindow;
 };

@@ -7,10 +7,12 @@
 
 class OrderBook
 {
+    friend class OrderBookWindow;
+    
 private:
-    // map is composed with <price, count>
-    std::map<double, unsigned int, std::greater<unsigned int>> bids_;
-    std::map<double, unsigned int> asks_;
+    // map is composed with <price, quantity>
+    std::map<double, unsigned int, std::greater<unsigned int>> bids_;    // bid is buy price
+    std::map<double, unsigned int> asks_;                                // ask is sell price
 
 public:
     std::queue<Order> newOrders;

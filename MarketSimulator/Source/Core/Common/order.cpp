@@ -60,7 +60,7 @@ EBehavior Order::GetBehavior() const
     return behavior_;
 }
 
-float Order::GetTradePrice() const
+double Order::GetTradePrice() const
 {
     return price_;
 }

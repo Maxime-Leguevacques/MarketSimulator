@@ -36,6 +36,6 @@ public:
     unsigned int GetId() const;
     EDirection GetDirection() const;
     EBehavior GetBehavior() const;
-    float GetTradePrice() const;
+    double GetTradePrice() const;
     unsigned int GetQuantity() const;
 };

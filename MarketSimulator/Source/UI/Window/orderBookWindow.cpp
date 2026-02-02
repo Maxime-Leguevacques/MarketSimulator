@@ -2,8 +2,7 @@
 
 #include "Core/Common/order.h"
 #include "imgui/imgui.h"
-
-
+#include "imgui/implot.h"
 
 
 OrderBookWindow::OrderBookWindow(const std::string& _name, OrderBook* _orderBook)
@@ -33,20 +32,38 @@ void OrderBookWindow::Update()
         AddOrderToLog(order);
         orderBook_->newOrders.pop();
     }
-    
-#pragma region Order_book_log
-    ImGui::Separator();
-    ImGui::Text("Order Log");
 
-    constexpr ImGuiTableFlags tableFlags =
+#pragma region Basic_buttons
+    if (ImGui::Button("new order"))
+    {
+        const Order order(ocount_);
+        order.Print();
+
+        // Add to order book
+        orderBook_->AddOrder(order);
+        AddOrderToLog(order);
+        
+        ocount_++;
+    }
+
+    if (ImGui::Button("print order book"))
+    {
+        orderBook_->Print();
+    }
+#pragma endregion Basic_buttons
+ 
+#pragma region Order_book_log
+    ImGui::Text("Log Table");
+
+    constexpr ImGuiTableFlags logTableFlags =
         ImGuiTableFlags_Borders |
         ImGuiTableFlags_RowBg |
         ImGuiTableFlags_ScrollY |
         ImGuiTableFlags_Resizable;
 
-    ImGui::BeginChild("OrderTableChild", ImVec2(0, 0), true);
+    ImGui::BeginChild("Log Table Child", ImVec2(0, 700), ImGuiChildFlags_ResizeY);
 
-    if (ImGui::BeginTable("OrderTable", 4, tableFlags))
+    if (ImGui::BeginTable("Log Table", 4, logTableFlags))
     {
         ImGui::TableSetupColumn("Trader");
         ImGui::TableSetupColumn("Side");
@@ -81,26 +98,51 @@ void OrderBookWindow::Update()
 
     ImGui::EndChild();
 #pragma endregion Order_book_log
-   
-#pragma region Basic_buttons
-    if (ImGui::Button("new order"))
-    {
-        const Order order(ocount_);
-        order.Print();
 
-        // Add to order book
-        orderBook_->AddOrder(order);
-        AddOrderToLog(order);
+#pragma region Order_book_depth_chart
+    std::vector<double> bidPrices;
+    std::vector<double> bidCumQty;
+    std::vector<double> askPrices;
+    std::vector<double> askCumQty;
+
+    double cumulative = 0.0;
+    // fill bids
+    for (const auto& [price, qty] : orderBook_->bids_)
+    {
+        cumulative += qty;
+        bidPrices.push_back(price);
+        bidCumQty.push_back(cumulative);
+    }
+    cumulative = 0.0;
+    // fill asks
+    for (const auto& [price, qty] : orderBook_->asks_)
+    {
+        cumulative += qty;
+        askPrices.push_back(price);
+        askCumQty.push_back(cumulative);
+    }
+
+    
+
+    ImGui::Text("Depth Chart");
+    
+    if (ImPlot::BeginPlot("Depth Chart", ImVec2(-1, -1)))
+    {
+        ImPlot::SetupAxes("Price", "Cumulative Quantity", ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
+
+        ImPlot::SetNextLineStyle(ImVec4(0, 1, 0, 1), 2.0f);
+        if (!bidPrices.empty())
+            ImPlot::PlotLine("Bids", bidPrices.data(), bidCumQty.data(), static_cast<int>(bidPrices.size()));
+
+        ImPlot::SetNextLineStyle(ImVec4(1, 0, 0, 1), 2.0f);
+        if (!askPrices.empty())
+            ImPlot::PlotLine("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
         
-        ocount_++;
+        ImPlot::EndPlot();
     }
 
-    if (ImGui::Button("print order book"))
-    {
-        orderBook_->Print();
-    }
-#pragma endregion Basic_buttons
- 
+#pragma endregion Order_book_depth_chart
+
     ImGui::End();
 }
 
