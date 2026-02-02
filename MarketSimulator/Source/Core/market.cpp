@@ -22,7 +22,7 @@ void Market::TEMP_CreateNewOrder()
 
     // Random offset
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-0.2f, 0.2f);
+    std::uniform_real_distribution dist(-0.2f, 0.2f);
     const float offset = dist(rng);
     order.SetPrice(assetStartingPrice + offset);
     order.SetQuantity(baseStartingQuantity);

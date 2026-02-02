@@ -15,6 +15,8 @@ void SimulationSettingsWindow::Update()
     const std::string playStr = market_->isPlaying ? "pause" : "play";
     if (ImGui::Button(playStr.c_str()))
         market_->isPlaying = !market_->isPlaying;
+
+    ImGui::SliderFloat("tick speed", &market_->tickSpeed, 0.1f, 100.0f);
     
     ImGui::InputDouble("start price", &market_->assetStartingPrice);
     ImGui::InputScalar("base quantity", ImGuiDataType_U32, &market_->baseStartingQuantity);
