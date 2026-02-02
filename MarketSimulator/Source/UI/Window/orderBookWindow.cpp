@@ -48,7 +48,8 @@ void OrderBookWindow::Update()
         ImGuiTableFlags_ScrollY |
         ImGuiTableFlags_Resizable;
 
-    ImGui::BeginChild("Log Table Child", ImVec2(0, 700), ImGuiChildFlags_ResizeY);
+    ImGui::SetNextWindowSize(ImVec2(0, ImGui::GetContentRegionAvail().y * 0.5f), ImGuiCond_Always);
+    ImGui::BeginChild("Log Table Child", ImVec2(0, ImGui::GetContentRegionAvail().y * 0.5f), ImGuiChildFlags_ResizeY);
     
     // Mouse scroll zoom while pressing CTRL
     if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::GetIO().KeyCtrl)

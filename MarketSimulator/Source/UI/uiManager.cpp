@@ -250,7 +250,7 @@ void UiManager::InitWindows()
 {
 }
 
-void UiManager::UpdateWindows(Market* _market)
+void UiManager::UpdateWindows()
 {
     for (const auto& window : windows_)
         window->Update();
@@ -288,7 +288,7 @@ void UiManager::Update()
         BeginDockSpace();
 
         market_->Update();
-        UpdateWindows(market_);
+        UpdateWindows();
 
         EndDockSpace();
 

@@ -47,7 +47,7 @@ private:
     void BeginDockSpace();
     void EndDockSpace();
     void InitWindows();
-    void UpdateWindows(Market* _market);
+    void UpdateWindows();
     
 public:
     void Init(Market* _market);

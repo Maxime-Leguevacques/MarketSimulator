@@ -22,19 +22,13 @@ void Market::TEMP_CreateNewOrder()
 
     // Random offset
     std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution dist(0, 2);
-    const float offset = dist(rng) <= 1 ? 0.2f : 0.1f;
-    
-    if (order.GetDirection() == EDirection::buyer)
-        order.SetPrice(assetStartingPrice - offset);
-    else
-        order.SetPrice(assetStartingPrice + offset);
-    
+    std::uniform_real_distribution<float> dist(-0.2f, 0.2f);
+    const float offset = dist(rng);
+    order.SetPrice(assetStartingPrice + offset);
     order.SetQuantity(baseStartingQuantity);
-
     // Add to order book
     orderBook_->AddOrder(order);
-
+    // Increment order index
     ocount_++;
 }
 
@@ -44,9 +38,14 @@ void Market::Update()
     const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
     const std::chrono::duration<float> delta = now - lastUpdate_;
     lastUpdate_ = now;
+    
+    if (!isPlaying)
+        return;
+    
     timeAccumulator_ += delta.count();
     const float secondsPerBar = 1.0f / tickSpeed;
 
+    
     while (timeAccumulator_ >= secondsPerBar)
     {
         TEMP_CreateNewOrder();
