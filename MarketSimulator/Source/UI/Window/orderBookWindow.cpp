@@ -39,10 +39,9 @@ void OrderBookWindow::Update()
         orderBook_->Print();
     }
 #pragma endregion Basic_buttons
- 
-#pragma region Order_book_log
-    ImGui::Text("Log Table");
 
+
+#pragma region Order_book_log
     constexpr ImGuiTableFlags logTableFlags =
         ImGuiTableFlags_Borders |
         ImGuiTableFlags_RowBg |
@@ -50,6 +49,17 @@ void OrderBookWindow::Update()
         ImGuiTableFlags_Resizable;
 
     ImGui::BeginChild("Log Table Child", ImVec2(0, 700), ImGuiChildFlags_ResizeY);
+    
+    // Mouse scroll zoom while pressing CTRL
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::GetIO().KeyCtrl)
+    {
+        logZoom_ += ImGui::GetIO().MouseWheel * 0.1f;
+        logZoom_ = std::clamp(logZoom_, 0.7f, 2.5f);
+    }
+
+    ImGui::SetWindowFontScale(logZoom_);
+    
+    ImGui::Text("Log Table");
 
     if (ImGui::BeginTable("Log Table", 4, logTableFlags))
     {
@@ -84,6 +94,7 @@ void OrderBookWindow::Update()
         ImGui::EndTable();
     }
 
+    ImGui::SetWindowFontScale(1.0f);
     ImGui::EndChild();
 #pragma endregion Order_book_log
 
@@ -145,12 +156,12 @@ void OrderBookWindow::Update()
     ImGui::End();
 }
 
-void OrderBookWindow::AddOrderToLog(const Order& _trader)
+void OrderBookWindow::AddOrderToLog(const Order& _order)
 {
     orderLog_.push_front({
-        .traderId = _trader.GetId(),
-        .side = _trader.GetDirection(),
-        .price = _trader.GetTradePrice(),
-        .quantity = _trader.GetQuantity()
+        .orderId = _order.GetId(),
+        .side = _order.GetDirection(),
+        .price = _order.GetTradePrice(),
+        .quantity = _order.GetQuantity()
     });
 }

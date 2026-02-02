@@ -1,6 +1,7 @@
 ﻿#include "Core/market.h"
 
 #include <iostream>
+#include <random>
 
 #include "Core/Common/order.h"
 
@@ -18,10 +19,16 @@ Market::~Market() = default;
 void Market::TEMP_CreateNewOrder()
 {
     Order order(ocount_);
+
+    // Random offset
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution dist(0, 2);
+    const float offset = dist(rng) <= 1 ? 0.2f : 0.1f;
+    
     if (order.GetDirection() == EDirection::buyer)
-        order.SetPrice(assetStartingPrice - 1.0f);
+        order.SetPrice(assetStartingPrice - offset);
     else
-        order.SetPrice(assetStartingPrice + 1.0f);
+        order.SetPrice(assetStartingPrice + offset);
     
     order.SetQuantity(baseStartingQuantity);
 

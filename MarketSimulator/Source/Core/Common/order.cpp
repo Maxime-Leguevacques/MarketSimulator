@@ -20,11 +20,11 @@ Order::Order()
 Order::Order(const unsigned int _id)
 {
     static std::mt19937 rng(std::random_device{}());
-    static std::uniform_int_distribution dist1(0, 1);
+    static std::uniform_int_distribution dist(0, 1);
 
     id_ = _id;
-    direction_ = dist1(rng) == 0 ? EDirection::buyer : EDirection::seller;
-    behavior_  = dist1(rng) == 0 ? EBehavior::maker : EBehavior::taker;
+    direction_ = dist(rng) == 0 ? EDirection::buyer : EDirection::seller;
+    behavior_  = dist(rng) == 0 ? EBehavior::maker : EBehavior::taker;
     price_ = 0.0f;
     quantity_ = 1;
 }

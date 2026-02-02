@@ -9,7 +9,7 @@
 
 struct SOrderRow
 {
-    unsigned int traderId;
+    unsigned int orderId;
     EDirection side;
     double price;
     unsigned int quantity;
@@ -25,6 +25,7 @@ private:
     OrderBook* orderBook_;
 
     bool isFill_ = true;
+    float logZoom_ = 1.0f;
     
 public:
     explicit OrderBookWindow(const std::string& _name, OrderBook* _orderBook);
@@ -33,5 +34,5 @@ public:
 public:
     void Update() override;
 
-    void AddOrderToLog(const Order& _trader);
+    void AddOrderToLog(const Order& _order);
 };
