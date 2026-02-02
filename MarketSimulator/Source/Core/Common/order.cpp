@@ -40,11 +40,6 @@ void Order::Print() const
     std::cout << "quantity: " << quantity_ << std::endl;
 }
 
-void Order::SetPrice(const double _price)
-{
-    price_ = _price;
-}
-
 unsigned int Order::GetId() const
 {
     return id_;
@@ -68,4 +63,14 @@ double Order::GetTradePrice() const
 unsigned int Order::GetQuantity() const
 {
     return quantity_;
+}
+
+void Order::SetPrice(const double _price)
+{
+    price_ = _price;
+}
+
+void Order::SetQuantity(const unsigned int _quantity)
+{
+    quantity_ = _quantity;
 }

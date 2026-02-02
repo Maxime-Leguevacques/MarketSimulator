@@ -23,8 +23,9 @@ private:
     unsigned int ocount_ = 0;    // Temporary variable to store order index
     
 public:
-    float tickSpeed = 1.0f;    // Bars per second
-    double assetStartingPrice = 1.0f;
+    float tickSpeed = 3.0f;    // Bars per second
+    double assetStartingPrice = 5.0f;
+    unsigned int baseStartingQuantity = 1;
     
 public:
     Market();

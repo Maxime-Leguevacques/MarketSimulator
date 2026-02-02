@@ -10,18 +10,6 @@ OrderBookWindow::OrderBookWindow(const std::string& _name, OrderBook* _orderBook
 
 OrderBookWindow::~OrderBookWindow() = default;
 
-void OrderBookWindow::TEMP_CreateNewOrder()
-{
-    const Order order(ocount_);
-    order.Print();
-
-    // Add to order book
-    orderBook_->AddOrder(order);
-    AddOrderToLog(order);
-        
-    ocount_++;
-}
-
 void OrderBookWindow::Update()
 {
     ImGui::Begin(name.c_str());
@@ -105,39 +93,50 @@ void OrderBookWindow::Update()
     std::vector<double> askPrices;
     std::vector<double> askCumQty;
 
-    double cumulative = 0.0;
     // fill bids
     for (const auto& [price, qty] : orderBook_->bids_)
     {
-        cumulative += qty;
         bidPrices.push_back(price);
-        bidCumQty.push_back(cumulative);
+        bidCumQty.push_back(qty);
     }
-    cumulative = 0.0;
     // fill asks
     for (const auto& [price, qty] : orderBook_->asks_)
     {
-        cumulative += qty;
         askPrices.push_back(price);
-        askCumQty.push_back(cumulative);
+        askCumQty.push_back(qty);
     }
 
-    
-
     ImGui::Text("Depth Chart");
+
+    ImGui::Checkbox("fill", &isFill_);
     
     if (ImPlot::BeginPlot("Depth Chart", ImVec2(-1, -1)))
     {
         ImPlot::SetupAxes("Price", "Cumulative Quantity", ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
 
-        ImPlot::SetNextLineStyle(ImVec4(0, 1, 0, 1), 2.0f);
         if (!bidPrices.empty())
+        {
+            // Draw bid line and fill (fill first
+            if (isFill_)
+            {
+                ImPlot::SetNextFillStyle(ImVec4(0, 1, 0, 0.4f));
+                ImPlot::PlotShaded("Bids", bidPrices.data(), bidCumQty.data(), static_cast<int>(bidPrices.size()));
+            }
+            ImPlot::SetNextLineStyle(ImVec4(0, 1, 0, 1), 2.0f);
             ImPlot::PlotLine("Bids", bidPrices.data(), bidCumQty.data(), static_cast<int>(bidPrices.size()));
-
-        ImPlot::SetNextLineStyle(ImVec4(1, 0, 0, 1), 2.0f);
-        if (!askPrices.empty())
-            ImPlot::PlotLine("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
+        }
         
+        if (!askPrices.empty())
+        {
+            if (isFill_)
+            {
+                ImPlot::SetNextFillStyle(ImVec4(1, 0, 0, 0.4f));
+                ImPlot::PlotShaded("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
+            }
+            ImPlot::SetNextLineStyle(ImVec4(1, 0, 0, 1), 2.0f);
+            ImPlot::PlotLine("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
+        }
+
         ImPlot::EndPlot();
     }
 

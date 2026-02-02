@@ -12,10 +12,9 @@ void SimulationSettingsWindow::Update()
 {
     ImGui::Begin(name.c_str());
     
-    if (ImGui::InputDouble("start price", &market_->assetStartingPrice))
-    {
-        
-    }
+    ImGui::InputDouble("start price", &market_->assetStartingPrice);
+
+    ImGui::InputScalar("base quantity", ImGuiDataType_U32, &market_->baseStartingQuantity);
 
     ImGui::End();
 }

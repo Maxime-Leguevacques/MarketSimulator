@@ -23,13 +23,12 @@ private:
 
     unsigned int ocount_ = 0;
     OrderBook* orderBook_;
+
+    bool isFill_ = true;
     
 public:
     explicit OrderBookWindow(const std::string& _name, OrderBook* _orderBook);
     virtual ~OrderBookWindow();
-
-private:
-    void TEMP_CreateNewOrder();
 
 public:
     void Update() override;

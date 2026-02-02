@@ -31,11 +31,12 @@ public:
 public:
     void Print() const;
 
-    void SetPrice(double _price);
-
     unsigned int GetId() const;
     EDirection GetDirection() const;
     EBehavior GetBehavior() const;
     double GetTradePrice() const;
     unsigned int GetQuantity() const;
+
+    void SetPrice(double _price);
+    void SetQuantity(unsigned int _quantity);
 };

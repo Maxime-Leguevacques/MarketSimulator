@@ -18,7 +18,12 @@ Market::~Market() = default;
 void Market::TEMP_CreateNewOrder()
 {
     Order order(ocount_);
-    order.SetPrice(assetStartingPrice);
+    if (order.GetDirection() == EDirection::buyer)
+        order.SetPrice(assetStartingPrice - 1.0f);
+    else
+        order.SetPrice(assetStartingPrice + 1.0f);
+    
+    order.SetQuantity(baseStartingQuantity);
 
     // Add to order book
     orderBook_->AddOrder(order);
