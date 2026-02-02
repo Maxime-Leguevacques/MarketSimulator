@@ -7,10 +7,10 @@ enum EDirection
     seller
 };
 
-enum EBehavior
+enum EType
 {
-    maker,
-    taker
+    limit,
+    market
 };
 
 
@@ -19,7 +19,7 @@ class Order
 private:
     unsigned int id_;
     EDirection direction_;
-    EBehavior behavior_;
+    EType type_;
     double price_;
     unsigned int quantity_;
 
@@ -33,7 +33,7 @@ public:
 
     unsigned int GetId() const;
     EDirection GetDirection() const;
-    EBehavior GetBehavior() const;
+    EType GetType() const;
     double GetTradePrice() const;
     unsigned int GetQuantity() const;
 

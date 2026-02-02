@@ -29,7 +29,6 @@ void OrderBookWindow::Update()
 
         // Add to order book
         orderBook_->AddOrder(order);
-        AddOrderToLog(order);
         
         ocount_++;
     }

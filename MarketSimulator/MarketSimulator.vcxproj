@@ -178,6 +178,7 @@
     <ClCompile Include="Source\Core\chart.cpp" />
     <ClCompile Include="Source\Core\Common\order.cpp" />
     <ClCompile Include="Source\Core\market.cpp" />
+    <ClCompile Include="Source\Core\matchingEngine.cpp" />
     <ClCompile Include="Source\Core\orderBook.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\serializer.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Include\Core\Common\bars.h" />
     <ClInclude Include="Include\Core\Common\order.h" />
     <ClInclude Include="Include\Core\market.h" />
+    <ClInclude Include="Include\Core\matchingEngine.h" />
     <ClInclude Include="Include\Core\orderBook.h" />
     <ClInclude Include="Include\serializer.h" />
     <ClInclude Include="Include\UI\uiManager.h" />

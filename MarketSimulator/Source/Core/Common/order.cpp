@@ -12,7 +12,7 @@ Order::Order()
 
     id_ = dist1(rng);
     direction_ = dist2(rng) == 0 ? EDirection::buyer : EDirection::seller;
-    behavior_  = dist2(rng) == 0 ? EBehavior::maker : EBehavior::taker;
+    type_  = dist2(rng) == 0 ? EType::limit : EType::market;
     price_ = 50.0f;
     quantity_ = 1;
 }
@@ -24,7 +24,7 @@ Order::Order(const unsigned int _id)
 
     id_ = _id;
     direction_ = dist(rng) == 0 ? EDirection::buyer : EDirection::seller;
-    behavior_  = dist(rng) == 0 ? EBehavior::maker : EBehavior::taker;
+    type_  = dist(rng) == 0 ? EType::limit : EType::market;
     price_ = 0.0f;
     quantity_ = 1;
 }
@@ -35,7 +35,7 @@ void Order::Print() const
 {
     std::cout << "id: " << id_ << " | ";
     std::cout << (direction_ == EDirection::buyer ? "buyer" : "seller") << ", "; 
-    std::cout << (behavior_ == EBehavior::maker ? "maker" : "taker") << " -> ";
+    std::cout << (type_ == EType::limit ? "limit" : "market") << " -> ";
     std::cout << "price: " << price_ << ", ";
     std::cout << "quantity: " << quantity_ << std::endl;
 }
@@ -50,9 +50,9 @@ EDirection Order::GetDirection() const
     return direction_;
 }
 
-EBehavior Order::GetBehavior() const
+EType Order::GetType() const
 {
-    return behavior_;
+    return type_;
 }
 
 double Order::GetTradePrice() const
