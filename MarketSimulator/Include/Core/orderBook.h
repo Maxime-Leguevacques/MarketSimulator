@@ -11,8 +11,8 @@ class OrderBook
     
 private:
     // map is composed with <price, quantity>
-    std::map<double, unsigned int, std::greater<double>> bids_;    // bid is buy price
-    std::map<double, unsigned int> asks_;                          // ask is sell price
+    std::map<double, unsigned int, std::greater<>> bids_;    // bid is buy price
+    std::map<double, unsigned int> asks_;                    // ask is sell price
 
 public:
     std::queue<Order> newOrders;
