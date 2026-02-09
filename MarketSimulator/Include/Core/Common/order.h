@@ -16,12 +16,12 @@ enum EType
 
 class Order
 {
-private:
-    unsigned int id_;
-    EDirection direction_;
-    EType type_;
-    double price_;
-    unsigned int quantity_;
+public:
+    unsigned int id;
+    EDirection direction;
+    EType type;
+    unsigned int priceCts;
+    unsigned int quantity;
 
 public:
     Order();
@@ -30,13 +30,4 @@ public:
 
 public:
     void Print() const;
-
-    unsigned int GetId() const;
-    EDirection GetDirection() const;
-    EType GetType() const;
-    double GetTradePrice() const;
-    unsigned int GetQuantity() const;
-
-    void SetPrice(double _price);
-    void SetQuantity(unsigned int _quantity);
 };

@@ -18,7 +18,7 @@ void SimulationSettingsWindow::Update()
 
     ImGui::SliderFloat("tick speed", &market_->tickSpeed, 0.1f, 100.0f);
     
-    ImGui::InputDouble("start price", &market_->assetStartingPrice);
+    ImGui::InputInt("start price", &market_->assetStartingPriceCts);
     ImGui::InputScalar("base quantity", ImGuiDataType_U32, &market_->baseStartingQuantity);
 
     ImGui::End();

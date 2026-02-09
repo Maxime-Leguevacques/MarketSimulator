@@ -85,7 +85,7 @@ void OrderBookWindow::Update()
             );
 
             ImGui::TableSetColumnIndex(2);
-            ImGui::Text("%.2f", price);
+            ImGui::Text("%d", price);
 
             ImGui::TableSetColumnIndex(3);
             ImGui::Text("%u", quantity);
@@ -159,9 +159,9 @@ void OrderBookWindow::Update()
 void OrderBookWindow::AddOrderToLog(const Order& _order)
 {
     orderLog_.push_front({
-        .orderId = _order.GetId(),
-        .side = _order.GetDirection(),
-        .price = _order.GetTradePrice(),
-        .quantity = _order.GetQuantity()
+        .orderId = _order.id,
+        .side = _order.direction,
+        .price = _order.priceCts,
+        .quantity = _order.quantity
     });
 }

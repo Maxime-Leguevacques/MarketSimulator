@@ -7,14 +7,16 @@
 
 #include <chrono>
 
-#include "chart.h"
 #include "orderBook.h"
+#include "matchingEngine.h"
+#include "chart.h"
 
 
 class Market
 {
 private:
     OrderBook* orderBook_ = nullptr;
+    MatchingEngine* matchingEngine_ = nullptr;
     Chart* chart_ = nullptr;
     
     std::chrono::steady_clock::time_point lastUpdate_;
@@ -24,8 +26,8 @@ private:
     
 public:
     bool isPlaying = false;
-    float tickSpeed = 3.0f;    // Bars per second
-    double assetStartingPrice = 5.0f;
+    float tickSpeed = 1.0f;    // Bars per second
+    int assetStartingPriceCts = 500;
     unsigned int baseStartingQuantity = 1;
     
 public:

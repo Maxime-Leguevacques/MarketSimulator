@@ -11,6 +11,7 @@ Market::Market()
     lastUpdate_ = std::chrono::steady_clock::now();
 
     orderBook_ = new OrderBook();
+    matchingEngine_ = new MatchingEngine(orderBook_);
     chart_ = new Chart();
 }
 
@@ -22,10 +23,10 @@ void Market::TEMP_CreateNewOrder()
 
     // Random offset
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution dist(-0.2f, 0.2f);
-    const float offset = dist(rng);
-    order.SetPrice(assetStartingPrice + offset);
-    order.SetQuantity(baseStartingQuantity);
+    std::uniform_int_distribution dist(-5, 5);
+    const unsigned int offsetCts = dist(rng);
+    order.priceCts = assetStartingPriceCts + offsetCts;
+    order.quantity = baseStartingQuantity;
     // Add to order book
     orderBook_->AddOrder(order);
     // Increment order index
@@ -39,21 +40,22 @@ void Market::Update()
     const std::chrono::duration<float> delta = now - lastUpdate_;
     lastUpdate_ = now;
     
-    if (!isPlaying)
-        return;
-    
-    timeAccumulator_ += delta.count();
-    const float secondsPerBar = 1.0f / tickSpeed;
-
-    
-    while (timeAccumulator_ >= secondsPerBar)
+    if (isPlaying)
     {
-        TEMP_CreateNewOrder();
-        orderBook_->Update();
-        chart_->Update();
-
-        timeAccumulator_ -= secondsPerBar;
+        timeAccumulator_ += delta.count();
+        const float secondsPerBar = 1.0f / tickSpeed;
+        
+        while (timeAccumulator_ >= secondsPerBar)
+        {
+            TEMP_CreateNewOrder();
+    
+            timeAccumulator_ -= secondsPerBar;
+        }
     }
+    
+    orderBook_->Update();
+    matchingEngine_->Update();
+    chart_->Update();
 }
 
 OrderBook* Market::GetOrderBook() const

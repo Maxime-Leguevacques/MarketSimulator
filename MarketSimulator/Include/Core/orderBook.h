@@ -8,11 +8,12 @@
 class OrderBook
 {
     friend class OrderBookWindow;
+    friend class MatchingEngine;
     
 private:
     // map is composed with <price, quantity>
-    std::map<double, unsigned int, std::greater<>> bids_;    // bid is buy price
-    std::map<double, unsigned int> asks_;                    // ask is sell price
+    std::map<unsigned int, unsigned int, std::greater<>> bids_;    // bid is buy price
+    std::map<unsigned int, unsigned int> asks_;                    // ask is sell price
 
 public:
     std::queue<Order> newOrders;
@@ -22,8 +23,8 @@ public:
     ~OrderBook();
 
 private:
-    void AddBid(unsigned int _id, double _price, unsigned int _quantity);
-    void AddAsk(unsigned int _id, double _price, unsigned int _quantity);
+    void AddBid(unsigned int _id, unsigned int _price, unsigned int _quantity);
+    void AddAsk(unsigned int _id, unsigned int _price, unsigned int _quantity);
 
 public:
     void Update();

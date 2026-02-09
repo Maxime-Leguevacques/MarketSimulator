@@ -11,7 +11,7 @@ struct SOrderRow
 {
     unsigned int orderId;
     EDirection side;
-    double price;
+    unsigned int price;
     unsigned int quantity;
 };
 
