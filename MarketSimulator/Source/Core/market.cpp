@@ -23,8 +23,13 @@ void Market::TEMP_CreateNewOrder()
 
     // Random offset
     std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution dist(-5, 5);
-    const unsigned int offsetCts = dist(rng);
+    std::uniform_int_distribution dist(-1, 5);
+    unsigned int offsetCts = dist(rng);
+
+    // Adapt offset to order direction
+    if (order.direction == buyer)
+        offsetCts *= -1;
+    
     order.priceCts = assetStartingPriceCts + offsetCts;
     order.quantity = baseStartingQuantity;
     // Add to order book

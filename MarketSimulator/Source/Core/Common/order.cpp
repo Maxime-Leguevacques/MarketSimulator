@@ -25,7 +25,7 @@ Order::Order(const unsigned int _id)
     id = _id;
     direction = dist(rng) == 0 ? EDirection::buyer : EDirection::seller;
     type  = dist(rng) == 0 ? EType::limit : EType::market;
-    priceCts = 0.0f;
+    priceCts = 0;
     quantity = 1;
 }
 

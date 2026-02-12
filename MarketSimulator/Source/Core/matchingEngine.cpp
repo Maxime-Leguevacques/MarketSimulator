@@ -66,23 +66,23 @@ void MatchingEngine::AddAsk(double _price, unsigned int& _qty)
 
 void MatchingEngine::Update()
 {
-    if (!orderBook_->bids_.empty())
-    {
-        std::map<unsigned int, unsigned int>::iterator bestBid = orderBook_->bids_.begin();
-        std::cout << "Best Bid: " << bestBid->first << " qty=" << bestBid->second << std::endl;
-    }
-    else
-    {
-        std::cout << "Best Bid: EMPTY" << std::endl;
-    }
-
-    if (!orderBook_->asks_.empty())
-    {
-        std::map<unsigned int, unsigned int>::iterator bestAsk = orderBook_->asks_.begin();
-        std::cout << "Best Ask: " << bestAsk->first << " qty=" << bestAsk->second << std::endl;
-    }
-    else
-    {
-        std::cout << "Best Ask: EMPTY" << std::endl;
-    }
+    // if (!orderBook_->bids_.empty())
+    // {
+    //     std::map<unsigned int, unsigned int>::iterator bestBid = orderBook_->bids_.begin();
+    //     std::cout << "Best Bid: " << bestBid->first << " qty=" << bestBid->second << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Best Bid: EMPTY" << std::endl;
+    // }
+    //
+    // if (!orderBook_->asks_.empty())
+    // {
+    //     std::map<unsigned int, unsigned int>::iterator bestAsk = orderBook_->asks_.begin();
+    //     std::cout << "Best Ask: " << bestAsk->first << " qty=" << bestAsk->second << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Best Ask: EMPTY" << std::endl;
+    // }
 }

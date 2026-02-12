@@ -16,6 +16,7 @@ struct SOrderRow
 };
 
 
+
 class OrderBookWindow : public Window
 {
 private:
@@ -25,6 +26,7 @@ private:
     OrderBook* orderBook_;
 
     bool isFill_ = true;
+    bool isFrom0_ = true;
     float logZoom_ = 1.0f;
     
 public:

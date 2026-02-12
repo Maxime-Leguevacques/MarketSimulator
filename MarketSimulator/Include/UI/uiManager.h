@@ -4,22 +4,10 @@
 #include <string>
 
 #include "window.h"
+#include "Common/utils.h"
 #include "Core/market.h"
 #include "Core/orderBook.h"
 #include "GLFW/glfw3.h"
-
-
-struct Vector2
-{
-    float x;
-    float y;
-};
-
-struct Vector2Int
-{
-    int x;
-    int y;
-};
 
 
 class UiManager

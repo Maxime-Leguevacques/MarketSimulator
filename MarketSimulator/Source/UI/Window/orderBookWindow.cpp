@@ -1,5 +1,7 @@
 ﻿#include "UI/Window/orderBookWindow.h"
 
+#include <iostream>
+
 #include "Core/Common/order.h"
 #include "imgui/imgui.h"
 #include "imgui/implot.h"
@@ -21,7 +23,7 @@ void OrderBookWindow::Update()
         orderBook_->newOrders.pop();
     }
 
-#pragma region Basic_buttons
+    #pragma region Basic_buttons
     if (ImGui::Button("new order"))
     {
         const Order order(ocount_);
@@ -37,68 +39,137 @@ void OrderBookWindow::Update()
     {
         orderBook_->Print();
     }
-#pragma endregion Basic_buttons
+    #pragma endregion Basic_buttons
 
-
-#pragma region Order_book_log
-    constexpr ImGuiTableFlags logTableFlags =
-        ImGuiTableFlags_Borders |
-        ImGuiTableFlags_RowBg |
-        ImGuiTableFlags_ScrollY |
-        ImGuiTableFlags_Resizable;
-
-    ImGui::SetNextWindowSize(ImVec2(0, ImGui::GetContentRegionAvail().y * 0.5f), ImGuiCond_Always);
-    ImGui::BeginChild("Log Table Child", ImVec2(0, ImGui::GetContentRegionAvail().y * 0.5f), ImGuiChildFlags_ResizeY);
-    
-    // Mouse scroll zoom while pressing CTRL
-    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::GetIO().KeyCtrl)
+    ImGui::BeginChild("Order book table views", ImVec2(-1, 650), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY);
+    if (ImGui::BeginTabBar("OrderBookTabs"))
     {
-        logZoom_ += ImGui::GetIO().MouseWheel * 0.1f;
-        logZoom_ = std::clamp(logZoom_, 0.7f, 2.5f);
-    }
-
-    ImGui::SetWindowFontScale(logZoom_);
-    
-    ImGui::Text("Log Table");
-
-    if (ImGui::BeginTable("Log Table", 4, logTableFlags))
-    {
-        ImGui::TableSetupColumn("Trader");
-        ImGui::TableSetupColumn("Side");
-        ImGui::TableSetupColumn("Price");
-        ImGui::TableSetupColumn("Quantity");
-        ImGui::TableHeadersRow();
-
-        for (const auto& [traderId, side, price, quantity] : orderLog_)
+        if (ImGui::BeginTabItem("Order Log"))
         {
-            ImGui::TableNextRow();
+            #pragma region Order_book_log
+            constexpr ImGuiTableFlags logTableFlags =
+                ImGuiTableFlags_Borders |
+                ImGuiTableFlags_RowBg |
+                ImGuiTableFlags_ScrollY |
+                ImGuiTableFlags_Resizable;
 
-            ImGui::TableSetColumnIndex(0);
-            ImGui::Text("%u", traderId);
+            // Mouse scroll zoom while pressing CTRL
+            if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::GetIO().KeyCtrl)
+            {
+                logZoom_ += ImGui::GetIO().MouseWheel * 0.1f;
+                logZoom_ = std::clamp(logZoom_, 0.7f, 2.5f);
+            }
 
-            ImGui::TableSetColumnIndex(1);
-            ImGui::TextColored(
-                side == EDirection::buyer
-                    ? ImVec4(0, 1, 0, 1)
-                    : ImVec4(1, 0, 0, 1),
-                side == EDirection::buyer ? "BUY" : "SELL"
-            );
+            ImGui::SetWindowFontScale(logZoom_);
+    
+            ImGui::Text("Log Table");
 
-            ImGui::TableSetColumnIndex(2);
-            ImGui::Text("%d", price);
+            if (ImGui::BeginTable("Log Table", 4, logTableFlags))
+            {
+                ImGui::TableSetupColumn("Trader");
+                ImGui::TableSetupColumn("Side");
+                ImGui::TableSetupColumn("Price");
+                ImGui::TableSetupColumn("Quantity");
+                ImGui::TableHeadersRow();
 
-            ImGui::TableSetColumnIndex(3);
-            ImGui::Text("%u", quantity);
+                for (const auto& [traderId, side, price, quantity] : orderLog_)
+                {
+                    ImGui::TableNextRow();
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("%u", traderId);
+
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::TextColored(
+                        side == EDirection::buyer
+                            ? ImVec4(0, 1, 0, 1)
+                            : ImVec4(1, 0, 0, 1),
+                        side == EDirection::buyer ? "BUY" : "SELL"
+                    );
+
+                    ImGui::TableSetColumnIndex(2);
+                    ImGui::Text("%u", price);
+
+                    ImGui::TableSetColumnIndex(3);
+                    ImGui::Text("%u", quantity);
+                }
+
+                ImGui::EndTable();
+            }
+
+            ImGui::SetWindowFontScale(1.0f);
+            #pragma endregion Order_book_log
+            ImGui::EndTabItem();
         }
 
-        ImGui::EndTable();
+        if (ImGui::BeginTabItem("Price Levels"))
+        {
+            #pragma region Order_book_price_levels
+            constexpr ImGuiTableFlags flags =
+                ImGuiTableFlags_Borders |
+                ImGuiTableFlags_RowBg |
+                ImGuiTableFlags_Resizable;
+
+            // Mouse scroll zoom while pressing CTRL
+            if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && ImGui::GetIO().KeyCtrl)
+            {
+                logZoom_ += ImGui::GetIO().MouseWheel * 0.1f;
+                logZoom_ = std::clamp(logZoom_, 0.7f, 2.5f);
+            }
+
+            ImGui::SetWindowFontScale(logZoom_);
+            
+            ImGui::Text("Aggregated Price Levels");
+
+            if (ImGui::BeginTable("Price Levels Table", 2, flags))
+            {
+                ImGui::TableSetupColumn("Price");
+                ImGui::TableSetupColumn("Qty");
+                ImGui::TableHeadersRow();
+
+                // Bids (already descending)
+                for (const auto& [price, qty] : orderBook_->bids_)
+                {
+                    ImGui::TableNextRow();
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::TextColored(ImVec4(0,1,0,1), "%u", price);
+
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text("%u", qty);
+                }
+
+                // Separator row
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(1);
+                ImGui::Separator();
+
+                // Asks (ascending)
+                for (const auto& [price, qty] : orderBook_->asks_)
+                {
+                    ImGui::TableNextRow();
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::TextColored(ImVec4(1,0,0,1), "%u", price);
+
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text("%u", qty);
+                }
+
+                ImGui::EndTable();
+            }
+            ImGui::SetWindowFontScale(1.0f);
+            #pragma endregion Order_book_price_levels
+            ImGui::EndTabItem();
+        }
+
+        ImGui::EndTabBar();
     }
 
-    ImGui::SetWindowFontScale(1.0f);
     ImGui::EndChild();
-#pragma endregion Order_book_log
-
-#pragma region Order_book_depth_chart
+    
+    
+    #pragma region Order_book_depth_chart
     std::vector<double> bidPrices;
     std::vector<double> bidCumQty;
     std::vector<double> askPrices;
@@ -120,6 +191,8 @@ void OrderBookWindow::Update()
     ImGui::Text("Depth Chart");
 
     ImGui::Checkbox("fill", &isFill_);
+    ImGui::SameLine();
+    ImGui::Checkbox("from 0", &isFrom0_);
     
     if (ImPlot::BeginPlot("Depth Chart", ImVec2(-1, -1)))
     {
@@ -151,7 +224,7 @@ void OrderBookWindow::Update()
         ImPlot::EndPlot();
     }
 
-#pragma endregion Order_book_depth_chart
+    #pragma endregion Order_book_depth_chart
 
     ImGui::End();
 }
