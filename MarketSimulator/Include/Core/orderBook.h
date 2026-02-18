@@ -30,6 +30,4 @@ public:
     void Update();
 
     void AddOrder(const Order& _order);
-
-    void Print();
 };

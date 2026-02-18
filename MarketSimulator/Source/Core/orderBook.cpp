@@ -1,7 +1,5 @@
 ﻿#include "Core/orderBook.h"
 
-#include <iostream>
-
 
 OrderBook::OrderBook() = default;
 
@@ -29,20 +27,4 @@ void OrderBook::AddOrder(const Order& _order)
     _order.direction == EDirection::buyer
         ? AddBid(_order.id, _order.priceCts, _order.quantity)
         : AddAsk(_order.id, _order.priceCts, _order.quantity);
-}
-
-void OrderBook::Print()
-{
-    std::cout << "===== ORDER BOOK =====\n";
-    std::cout << "Asks:\n";
-    for (auto it = asks_.rbegin(); it != asks_.rend(); ++it)
-        std::cout << it->first << " : " << it->second << "\n";
-
-    std::cout << "   ----------------   \n";
-
-    std::cout << "Bids:\n";
-    for (const auto & [fst, snd] : bids_)
-        std::cout << fst << " : " << snd << "\n";
-    
-    std::cout << "======================" << std::endl;
 }

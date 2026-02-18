@@ -34,14 +34,9 @@ void OrderBookWindow::Update()
         
         ocount_++;
     }
-
-    if (ImGui::Button("print order book"))
-    {
-        orderBook_->Print();
-    }
     #pragma endregion Basic_buttons
 
-    ImGui::BeginChild("Order book table views", ImVec2(-1, 650), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY);
+    ImGui::BeginChild("Order book table views", ImVec2(-1, 400), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY);
     if (ImGui::BeginTabBar("OrderBookTabs"))
     {
         if (ImGui::BeginTabItem("Order Log"))
@@ -127,30 +122,38 @@ void OrderBookWindow::Update()
                 ImGui::TableSetupColumn("Qty");
                 ImGui::TableHeadersRow();
 
-                // Bids (already descending)
+                // Asks (highest first
+                for (auto it = orderBook_->asks_.rbegin(); it != orderBook_->asks_.rend(); ++it)
+                {
+                    ImGui::TableNextRow();
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::TextColored(ImVec4(1,0,0,1), "%u", it->first);
+
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text("%u", it->second);
+                }
+
+                // Separator row
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                // Calculate number of '#' to type to have a nice visual seperator
+                const float cellWidth = ImGui::GetContentRegionAvail().x;
+                const float charWidth = ImGui::CalcTextSize("#").x;
+                const int count = static_cast<int>(cellWidth / charWidth);
+                const std::string line(count, '#');
+                ImGui::TextUnformatted(line.c_str());
+                // Set to next column as well
+                ImGui::TableSetColumnIndex(1);
+                ImGui::TextUnformatted(line.c_str());
+
+                // Bids (highest first)
                 for (const auto& [price, qty] : orderBook_->bids_)
                 {
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
                     ImGui::TextColored(ImVec4(0,1,0,1), "%u", price);
-
-                    ImGui::TableSetColumnIndex(1);
-                    ImGui::Text("%u", qty);
-                }
-
-                // Separator row
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(1);
-                ImGui::Separator();
-
-                // Asks (ascending)
-                for (const auto& [price, qty] : orderBook_->asks_)
-                {
-                    ImGui::TableNextRow();
-
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::TextColored(ImVec4(1,0,0,1), "%u", price);
 
                     ImGui::TableSetColumnIndex(1);
                     ImGui::Text("%u", qty);
