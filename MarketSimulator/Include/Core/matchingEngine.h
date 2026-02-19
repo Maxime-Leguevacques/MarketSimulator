@@ -1,23 +1,19 @@
 ﻿#pragma once
 
 #include "orderBook.h"
+#include "Common/order.h"
 
 
 class MatchingEngine
 {
-private:
-    OrderBook* orderBook_ = nullptr;
-    
 public:
-    MatchingEngine(OrderBook* _orderBook);
-    ~MatchingEngine();
+    MatchingEngine() = delete;
+    ~MatchingEngine() = delete;
 
 private:
-    void MatchBid(unsigned int& _qty);
-    void MatchAsk(unsigned int& _qty);
-    void AddBid(double _price, unsigned int& _qty);
-    void AddAsk(double _price, unsigned int& _qty);
+    static void MatchBid(OrderBook* _orderBook, Order& _order);
+    static void MatchAsk(OrderBook* _orderBook, Order& _order);
     
 public:
-    void Update();
+    static void FindMatch(OrderBook* _orderBook, Order& _order);
 };

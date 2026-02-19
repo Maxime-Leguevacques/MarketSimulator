@@ -122,16 +122,25 @@ void OrderBookWindow::Update()
                 ImGui::TableSetupColumn("Qty");
                 ImGui::TableHeadersRow();
 
-                // Asks (highest first
+                // Asks (highest first)
                 for (auto it = orderBook_->asks_.rbegin(); it != orderBook_->asks_.rend(); ++it)
                 {
+                    unsigned int totalQty = 0;
+                    std::queue<SMatchableOrder> temp = it->second;
+
+                    while (!temp.empty())
+                    {
+                        totalQty += temp.front().qty;
+                        temp.pop();
+                    }
+
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
                     ImGui::TextColored(ImVec4(1,0,0,1), "%u", it->first);
 
                     ImGui::TableSetColumnIndex(1);
-                    ImGui::Text("%u", it->second);
+                    ImGui::Text("%u", totalQty);
                 }
 
                 // Separator row
@@ -148,15 +157,24 @@ void OrderBookWindow::Update()
                 ImGui::TextUnformatted(line.c_str());
 
                 // Bids (highest first)
-                for (const auto& [price, qty] : orderBook_->bids_)
+                for (const auto& [price, orders] : orderBook_->bids_)
                 {
+                    unsigned int totalQty = 0;
+                    std::queue<SMatchableOrder> temp = orders;
+
+                    while (!temp.empty())
+                    {
+                        totalQty += temp.front().qty;
+                        temp.pop();
+                    }
+
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
                     ImGui::TextColored(ImVec4(0,1,0,1), "%u", price);
 
                     ImGui::TableSetColumnIndex(1);
-                    ImGui::Text("%u", qty);
+                    ImGui::Text("%u", totalQty);
                 }
 
                 ImGui::EndTable();
@@ -179,16 +197,30 @@ void OrderBookWindow::Update()
     std::vector<double> askCumQty;
 
     // fill bids
-    for (const auto& [price, qty] : orderBook_->bids_)
+    for (const auto& [price, order] : orderBook_->bids_)
     {
+        unsigned int totalQty = 0;
+        std::queue<SMatchableOrder> temp = order;
+        while (!temp.empty())
+        {
+            totalQty += temp.front().qty;
+            temp.pop();
+        }
         bidPrices.push_back(price);
-        bidCumQty.push_back(qty);
+        bidCumQty.push_back(totalQty);
     }
     // fill asks
-    for (const auto& [price, qty] : orderBook_->asks_)
+    for (const auto& [price, order] : orderBook_->asks_)
     {
+        unsigned int totalQty = 0;
+        std::queue<SMatchableOrder> temp = order;
+        while (!temp.empty())
+        {
+            totalQty += temp.front().qty;
+            temp.pop();
+        }
         askPrices.push_back(price);
-        askCumQty.push_back(qty);
+        askCumQty.push_back(totalQty);
     }
 
     ImGui::Text("Depth Chart");

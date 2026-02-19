@@ -11,7 +11,6 @@ Market::Market()
     lastUpdate_ = std::chrono::steady_clock::now();
 
     orderBook_ = new OrderBook();
-    matchingEngine_ = new MatchingEngine(orderBook_);
     chart_ = new Chart();
 }
 
@@ -58,8 +57,6 @@ void Market::Update()
         }
     }
     
-    orderBook_->Update();
-    matchingEngine_->Update();
     chart_->Update();
 }
 

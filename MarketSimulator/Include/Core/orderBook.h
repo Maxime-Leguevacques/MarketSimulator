@@ -5,15 +5,22 @@
 #include "Common/order.h"
 
 
+struct SMatchableOrder
+{
+    unsigned int id;
+    unsigned int qty = 0;
+};
+
+
 class OrderBook
 {
     friend class OrderBookWindow;
     friend class MatchingEngine;
     
 private:
-    // map is composed with <price, quantity>
-    std::map<unsigned int, unsigned int, std::greater<>> bids_;    // bid is buy price
-    std::map<unsigned int, unsigned int> asks_;                    // ask is sell price
+    // map is composed with <price, SMatchableOrder>
+    std::map<unsigned int, std::queue<SMatchableOrder>, std::greater<>> bids_;    // bid is buy price
+    std::map<unsigned int, std::queue<SMatchableOrder>> asks_;                    // ask is sell price
 
 public:
     std::queue<Order> newOrders;
@@ -23,11 +30,9 @@ public:
     ~OrderBook();
 
 private:
-    void AddBid(unsigned int _id, unsigned int _price, unsigned int _quantity);
-    void AddAsk(unsigned int _id, unsigned int _price, unsigned int _quantity);
+    void AddBid(unsigned int _id, unsigned int _price, unsigned int _qty);
+    void AddAsk(unsigned int _id, unsigned int _price, unsigned int _qty);
 
 public:
-    void Update();
-
     void AddOrder(const Order& _order);
 };
