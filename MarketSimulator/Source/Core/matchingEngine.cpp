@@ -8,9 +8,9 @@ void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
     if (_orderBook->sells_.empty())
         return;
 
-    auto it = _orderBook->sells_.begin();
+    const auto it = _orderBook->sells_.begin();
     // First, we need to check if the incoming order has an opposite order on the same price level or lower
-    if (it->first > _incoming.priceCts)
+    if (_incoming.priceCts < it->first)
         return;
 
     // Loop until quantity is gone on one side
@@ -36,14 +36,49 @@ void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
             queue.pop();
     }
 
-    // sell price level if empty
+    // Erase sell price level if empty
     if (queue.empty())
         _orderBook->sells_.erase(it);
     
 }
 
-void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _order)
+void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
 {
+    if (_orderBook->buys_.empty())
+        return;
+
+    const auto it = _orderBook->buys_.begin();
+    // First, we need to check if the incoming order has an opposite order on the same price level or lower
+    if (_incoming.priceCts > it->first)
+        return;
+
+    // Loop until quantity is gone on one side
+    std::queue<SMatchableOrder>& queue = it->second;
+    while (!queue.empty() && _incoming.qty > 0)
+    {
+        // Then we take the smallest available sell price
+        SMatchableOrder& buy = it->second.front();
+
+        std::cout
+            << "Match from SELL order | SELL: " << _incoming.id << " " << _incoming.qty << " "<< _incoming.priceCts 
+            << " -> BUY: " << buy.id << " " << buy.qty << " " << it->first << std::endl;
+
+        // Find the traded quantity
+        const unsigned int tradedQty = std::min(_incoming.qty, buy.qty);
+
+        // Reduce quantities
+        _incoming.qty -= tradedQty;
+        buy.qty -= tradedQty;
+
+        // Erase buy if needed
+        if (buy.qty == 0)
+            queue.pop();
+    }
+
+    // Erase buy price level if empty
+    if (queue.empty())
+        _orderBook->buys_.erase(it);
+    
 }
 
 void MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)

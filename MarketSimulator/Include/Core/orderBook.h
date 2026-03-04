@@ -19,8 +19,8 @@ class OrderBook
     
 private:
     // map is composed with <price, SMatchableOrder>
-    std::map<unsigned int, std::queue<SMatchableOrder>, std::greater<>> buys_;    // bid is buy price
-    std::map<unsigned int, std::queue<SMatchableOrder>> sells_;                    // ask is sell price
+    std::map<unsigned int, std::queue<SMatchableOrder>, std::greater<>> buys_;
+    std::map<unsigned int, std::queue<SMatchableOrder>> sells_;               
 
 public:
     std::queue<Order> newOrders;
