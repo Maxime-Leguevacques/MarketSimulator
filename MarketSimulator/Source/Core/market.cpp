@@ -26,11 +26,11 @@ void Market::TEMP_CreateNewOrder()
     unsigned int offsetCts = dist(rng);
 
     // Adapt offset to order direction
-    if (order.direction == buyer)
+    if (order.direction == buy)
         offsetCts *= -1;
     
     order.priceCts = assetStartingPriceCts + offsetCts;
-    order.quantity = baseStartingQuantity;
+    order.qty = baseStartingQuantity;
     // Add to order book
     orderBook_->AddOrder(order);
     // Increment order index

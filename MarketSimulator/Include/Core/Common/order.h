@@ -3,8 +3,8 @@
 
 enum EDirection
 {
-    buyer,
-    seller
+    buy,
+    sell
 };
 
 enum EType
@@ -21,7 +21,7 @@ public:
     EDirection direction;
     EType type;
     unsigned int priceCts;
-    unsigned int quantity;
+    unsigned int qty;
 
 public:
     Order();

@@ -11,8 +11,8 @@ public:
     ~MatchingEngine() = delete;
 
 private:
-    static void MatchBid(OrderBook* _orderBook, Order& _order);
-    static void MatchAsk(OrderBook* _orderBook, Order& _order);
+    static void MatchBuy(OrderBook* _orderBook, Order& _incoming);
+    static void MatchSell(OrderBook* _orderBook, Order& _order);
     
 public:
     static void FindMatch(OrderBook* _orderBook, Order& _order);

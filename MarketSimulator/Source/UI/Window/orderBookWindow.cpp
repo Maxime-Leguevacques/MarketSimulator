@@ -57,8 +57,6 @@ void OrderBookWindow::Update()
 
             ImGui::SetWindowFontScale(logZoom_);
     
-            ImGui::Text("Log Table");
-
             if (ImGui::BeginTable("Log Table", 4, logTableFlags))
             {
                 ImGui::TableSetupColumn("Trader");
@@ -76,10 +74,10 @@ void OrderBookWindow::Update()
 
                     ImGui::TableSetColumnIndex(1);
                     ImGui::TextColored(
-                        side == EDirection::buyer
+                        side == EDirection::buy
                             ? ImVec4(0, 1, 0, 1)
                             : ImVec4(1, 0, 0, 1),
-                        side == EDirection::buyer ? "BUY" : "SELL"
+                        side == EDirection::buy ? "BUY" : "SELL"
                     );
 
                     ImGui::TableSetColumnIndex(2);
@@ -114,16 +112,14 @@ void OrderBookWindow::Update()
 
             ImGui::SetWindowFontScale(logZoom_);
             
-            ImGui::Text("Aggregated Price Levels");
-
             if (ImGui::BeginTable("Price Levels Table", 2, flags))
             {
                 ImGui::TableSetupColumn("Price");
                 ImGui::TableSetupColumn("Qty");
                 ImGui::TableHeadersRow();
 
-                // Asks (highest first)
-                for (auto it = orderBook_->asks_.rbegin(); it != orderBook_->asks_.rend(); ++it)
+                // Sells (highest first)
+                for (auto it = orderBook_->sells_.rbegin(); it != orderBook_->sells_.rend(); ++it)
                 {
                     unsigned int totalQty = 0;
                     std::queue<SMatchableOrder> temp = it->second;
@@ -156,8 +152,8 @@ void OrderBookWindow::Update()
                 ImGui::TableSetColumnIndex(1);
                 ImGui::TextUnformatted(line.c_str());
 
-                // Bids (highest first)
-                for (const auto& [price, orders] : orderBook_->bids_)
+                // Buys (highest first)
+                for (const auto& [price, orders] : orderBook_->buys_)
                 {
                     unsigned int totalQty = 0;
                     std::queue<SMatchableOrder> temp = orders;
@@ -191,13 +187,13 @@ void OrderBookWindow::Update()
     
     
     #pragma region Order_book_depth_chart
-    std::vector<double> bidPrices;
-    std::vector<double> bidCumQty;
-    std::vector<double> askPrices;
-    std::vector<double> askCumQty;
+    std::vector<double> buyPrices;
+    std::vector<double> buyCumQty;
+    std::vector<double> sellPrices;
+    std::vector<double> sellCumQty;
 
-    // fill bids
-    for (const auto& [price, order] : orderBook_->bids_)
+    // fill buys
+    for (const auto& [price, order] : orderBook_->buys_)
     {
         unsigned int totalQty = 0;
         std::queue<SMatchableOrder> temp = order;
@@ -206,11 +202,11 @@ void OrderBookWindow::Update()
             totalQty += temp.front().qty;
             temp.pop();
         }
-        bidPrices.push_back(price);
-        bidCumQty.push_back(totalQty);
+        buyPrices.push_back(price);
+        buyCumQty.push_back(totalQty);
     }
-    // fill asks
-    for (const auto& [price, order] : orderBook_->asks_)
+    // fill sells
+    for (const auto& [price, order] : orderBook_->sells_)
     {
         unsigned int totalQty = 0;
         std::queue<SMatchableOrder> temp = order;
@@ -219,8 +215,8 @@ void OrderBookWindow::Update()
             totalQty += temp.front().qty;
             temp.pop();
         }
-        askPrices.push_back(price);
-        askCumQty.push_back(totalQty);
+        sellPrices.push_back(price);
+        sellCumQty.push_back(totalQty);
     }
 
     ImGui::Text("Depth Chart");
@@ -233,27 +229,27 @@ void OrderBookWindow::Update()
     {
         ImPlot::SetupAxes("Price", "Cumulative Quantity", ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
 
-        if (!bidPrices.empty())
+        if (!buyPrices.empty())
         {
-            // Draw bid line and fill (fill first
+            // Draw buy line and fill (fill first
             if (isFill_)
             {
                 ImPlot::SetNextFillStyle(ImVec4(0, 1, 0, 0.4f));
-                ImPlot::PlotShaded("Bids", bidPrices.data(), bidCumQty.data(), static_cast<int>(bidPrices.size()));
+                ImPlot::PlotShaded("Buys", buyPrices.data(), buyCumQty.data(), static_cast<int>(buyPrices.size()));
             }
             ImPlot::SetNextLineStyle(ImVec4(0, 1, 0, 1), 2.0f);
-            ImPlot::PlotLine("Bids", bidPrices.data(), bidCumQty.data(), static_cast<int>(bidPrices.size()));
+            ImPlot::PlotLine("Buys", buyPrices.data(), buyCumQty.data(), static_cast<int>(buyPrices.size()));
         }
         
-        if (!askPrices.empty())
+        if (!sellPrices.empty())
         {
             if (isFill_)
             {
                 ImPlot::SetNextFillStyle(ImVec4(1, 0, 0, 0.4f));
-                ImPlot::PlotShaded("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
+                ImPlot::PlotShaded("Sells", sellPrices.data(), sellCumQty.data(), static_cast<int>(sellPrices.size()));
             }
             ImPlot::SetNextLineStyle(ImVec4(1, 0, 0, 1), 2.0f);
-            ImPlot::PlotLine("Asks", askPrices.data(), askCumQty.data(), static_cast<int>(askPrices.size()));
+            ImPlot::PlotLine("Sells", sellPrices.data(), sellCumQty.data(), static_cast<int>(sellPrices.size()));
         }
 
         ImPlot::EndPlot();
@@ -270,6 +266,6 @@ void OrderBookWindow::AddOrderToLog(const Order& _order)
         .orderId = _order.id,
         .side = _order.direction,
         .price = _order.priceCts,
-        .quantity = _order.quantity
+        .quantity = _order.qty
     });
 }
