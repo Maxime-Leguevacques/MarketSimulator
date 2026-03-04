@@ -13,11 +13,33 @@ void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
     if (it->first > _incoming.priceCts)
         return;
 
-    // Then we take the smallest available sell price
-    SMatchableOrder& sell = it->second.front();
+    // Loop until quantity is gone on one side
+    std::queue<SMatchableOrder>& queue = it->second;
+    while (!queue.empty() && _incoming.qty > 0)
+    {
+        // Then we take the smallest available sell price
+        SMatchableOrder& sell = it->second.front();
+        
+        std::cout
+            << "Match from BUY order | BUY: " << _incoming.id << " " << _incoming.qty << " "<< _incoming.priceCts 
+            << " -> SELL: " << sell.id << " " << sell.qty << " " << it->first << std::endl;
+
+        // Find the traded quantity
+        const unsigned int tradedQty = std::min(_incoming.qty, sell.qty);
+
+        // Reduce quantities
+        _incoming.qty -= tradedQty;
+        sell.qty -= tradedQty;
+
+        // Erase sell if needed
+        if (sell.qty == 0)
+            queue.pop();
+    }
+
+    // sell price level if empty
+    if (queue.empty())
+        _orderBook->sells_.erase(it);
     
-    std::cout << "Match from BUY order | BUY: " << _incoming.id << " " << _incoming.qty << " " << _incoming.priceCts;
-    std::cout << " -> SELL: " << sell.id << " " << sell.qty << " " << it->first << std::endl;
 }
 
 void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _order)
@@ -38,9 +60,9 @@ void MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)
     //
     // The final step concerns the quantity of the incoming order. At this point, we are sure that the incoming buy is
     // trading with asks with the correct price. However, its quantity may differ by being smaller or larger than the
-    // ask. We need to match the incoming order until it no longer has any quantity left. In this process, the ask
-    // may run out or not. If not, we keep it, and if it does, we match the remaining quantity of the buy with the next
-    // ask in the queue.
+    // ask. We need to match the incoming order until one side has no quantity left. In this process, the ask may run
+    // out or not. If not, we keep it, and if it does, we match the remaining quantity of the buy with the next ask in
+    // the queue.
     
     _order.direction == EDirection::buy ? MatchBuy(_orderBook, _order) : MatchSell(_orderBook, _order);
 }
