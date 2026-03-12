@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include <map>
 #include <queue>
 
@@ -30,8 +31,8 @@ public:
     ~OrderBook();
 
 private:
-    void AddBid(unsigned int _id, unsigned int _price, unsigned int _qty);
-    void AddAsk(unsigned int _id, unsigned int _price, unsigned int _qty);
+    void AddBuy(unsigned int _id, unsigned int _price, unsigned int _qty);
+    void AddSell(unsigned int _id, unsigned int _price, unsigned int _qty);
 
 public:
     void AddOrder(const Order& _order);

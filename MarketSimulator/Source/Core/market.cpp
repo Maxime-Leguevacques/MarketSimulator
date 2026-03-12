@@ -16,7 +16,11 @@ Market::Market()
 
 Market::~Market() = default;
 
-void Market::TEMP_CreateNewOrder()
+void Market::DoTick()
+{
+}
+
+Order Market::TEMP_CreateNewOrder()
 {
     Order order(ocount_);
 
@@ -31,14 +35,14 @@ void Market::TEMP_CreateNewOrder()
     
     order.priceCts = assetStartingPriceCts + offsetCts;
     order.qty = baseStartingQuantity;
-    // Add to order book
-    orderBook_->AddOrder(order);
-    // Increment order index
-    ocount_++;
+
+    return order;
 }
 
 void Market::Update()
 {
+    chart_->Update();
+    
     // Update timer to make market grow with tickSpeed
     const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
     const std::chrono::duration<float> delta = now - lastUpdate_;
@@ -51,13 +55,15 @@ void Market::Update()
         
         while (timeAccumulator_ >= secondsPerBar)
         {
-            TEMP_CreateNewOrder();
-    
+            Order order = TEMP_CreateNewOrder();
+            // Add to order book
+            orderBook_->AddOrder(order);
+            // Increment order index
+            ocount_++;
+            
             timeAccumulator_ -= secondsPerBar;
         }
     }
-    
-    chart_->Update();
 }
 
 OrderBook* Market::GetOrderBook() const

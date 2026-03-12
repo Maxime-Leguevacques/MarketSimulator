@@ -27,6 +27,16 @@ void ChartWindow::Update()
     
     ImGui::Begin(name.c_str());
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("interval");
+    ImGui::SameLine();
+
+    // Calculate minimal width needed for combo box
+    const float width = ImGui::CalcTextSize(intervalItems[selectedInterval_]).x + 25;
+    ImGui::SetNextItemWidth(width);
+    if (ImGui::Combo("##interval", &selectedInterval_, intervalItems, IM_ARRAYSIZE(intervalItems)))
+        interval = static_cast<EInterval>(selectedInterval_);
+
     if (ImPlot::BeginPlot("Candlestick Chart", ImGui::GetContentRegionAvail(), ImPlotFlags_Crosshairs))
     {
         // X axis: time, Y axis: price
@@ -59,4 +69,16 @@ void ChartWindow::Update()
     }
     
     ImGui::End();
+}
+
+int ChartWindow::IntervalToSeconds(const EInterval _interval)
+{
+    switch (interval)
+    {
+    case EInterval::second: return 1;
+    case EInterval::minute: return 60;
+    case EInterval::hour:   return 60 * 60;
+    case EInterval::day:    return 24 * 60 * 60;
+    default:                return 60;
+    }
 }

@@ -14,7 +14,7 @@ struct Bar
     int n;          // number of trades
 
     Bar() = default;
-    ~Bar() = default;
+    
     constexpr Bar(
         const uint32_t _openTime,
         const float _openPrice,

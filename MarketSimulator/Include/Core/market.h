@@ -35,7 +35,10 @@ public:
     ~Market();
 
 private:
-    void TEMP_CreateNewOrder();
+    // DoTick corresponds to the market simulated tick. All the Update functions are reserved for general app updates
+    void DoTick();
+    
+    Order TEMP_CreateNewOrder();
 
 public:
     void Update();

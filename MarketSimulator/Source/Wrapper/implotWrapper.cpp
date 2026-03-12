@@ -30,7 +30,7 @@ void ImplotWrapper::PlotCandlestick(
     
     const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
                                                                                                                                     // So we check if we are on first bar to use that seconds value or not
-    // custom tool
+    #pragma region custom tooltip
     if (ImPlot::IsPlotHovered() && _tooltip)
     {
         ImPlotPoint mouse       = ImPlot::GetPlotMousePos();
@@ -58,6 +58,7 @@ void ImplotWrapper::PlotCandlestick(
             ImGui::EndTooltip();
         }
     }
+    #pragma endregion custom tooltip
 
     // begin plot item
     if (ImPlot::BeginItem(_labelId))

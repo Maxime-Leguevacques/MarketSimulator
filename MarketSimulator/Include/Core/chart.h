@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Common/bars.h"
+#include "Common/order.h"
 
 
 class Chart
@@ -20,4 +21,5 @@ public:
 
 public:
     void Update();
+    void AddOrder(const Order& _order);
 };

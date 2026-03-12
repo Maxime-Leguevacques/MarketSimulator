@@ -23,7 +23,7 @@ void App::Init()
     uiManager_.Init(market_);
 }
 
-void App::Update()
+void App::Run()
 {
-    uiManager_.Update();
+    uiManager_.Run();
 }

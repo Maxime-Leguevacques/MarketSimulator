@@ -7,13 +7,13 @@ OrderBook::OrderBook() = default;
 
 OrderBook::~OrderBook() = default;
 
-void OrderBook::AddBid(const unsigned int  _id, const unsigned int _price, const unsigned int _qty)
+void OrderBook::AddBuy(const unsigned int  _id, const unsigned int _price, const unsigned int _qty)
 {
     const SMatchableOrder mo = { .id = _id, .qty = _qty };
     buys_[_price].push(mo);
 }
 
-void OrderBook::AddAsk(const unsigned int _id, const unsigned int _price, const unsigned int _qty)
+void OrderBook::AddSell(const unsigned int _id, const unsigned int _price, const unsigned int _qty)
 {
     const SMatchableOrder mo = { .id = _id, .qty = _qty };
     sells_[_price].push(mo);
@@ -27,8 +27,8 @@ void OrderBook::AddOrder(const Order& _order)
 
     // Add to order book
     _order.direction == EDirection::buy
-        ? AddBid(_order.id, _order.priceCts, _order.qty)
-        : AddAsk(_order.id, _order.priceCts, _order.qty);
+        ? AddBuy(_order.id, _order.priceCts, _order.qty)
+        : AddSell(_order.id, _order.priceCts, _order.qty);
 
     MatchingEngine::FindMatch(this, incoming);
 }

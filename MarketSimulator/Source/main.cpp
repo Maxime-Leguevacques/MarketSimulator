@@ -9,5 +9,5 @@ int main()
     
     app->Init();
 
-    app->Update();
+    app->Run();
 }

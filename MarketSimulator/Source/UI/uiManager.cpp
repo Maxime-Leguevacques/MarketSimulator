@@ -269,7 +269,7 @@ void UiManager::Init(Market* _market)
     InitImGui();
 }
 
-void UiManager::Update()
+void UiManager::Run()
 {
     const ImGuiIO& io = ImGui::GetIO();
     glViewport(0, 0, screenSize.x, screenSize.y);

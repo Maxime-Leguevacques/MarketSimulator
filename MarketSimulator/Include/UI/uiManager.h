@@ -39,7 +39,7 @@ private:
     
 public:
     void Init(Market* _market);
-    void Update();
+    void Run();
 
     Window* GetWindowByName(const std::string& _name);
 };
