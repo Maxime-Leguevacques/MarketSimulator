@@ -1,6 +1,4 @@
-﻿#include <iostream>
-
-#include "app.h"
+﻿#include "app.h"
 
 
 int main()

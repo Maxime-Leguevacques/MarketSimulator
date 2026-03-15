@@ -9,24 +9,26 @@
 
 #include "orderBook.h"
 #include "matchingEngine.h"
-#include "chart.h"
 
 
 class Market
 {
 private:
+    std::vector<Order> orders_;    
+    
     OrderBook* orderBook_ = nullptr;
     MatchingEngine* matchingEngine_ = nullptr;
-    Chart* chart_ = nullptr;
     
     std::chrono::steady_clock::time_point lastUpdate_;
-    float timeAccumulator_ = 0.0f;
+    float timeTickAccumulator_ = 0.0f;
+    float orderTickAccumulator_ = 0.0f;
 
     unsigned int ocount_ = 0;    // Temporary variable to store order index
     
 public:
     bool isPlaying = false;
-    float tickSpeed = 1.0f;    // Bars per second
+    float timeTick = 1.0f;    // the flow of time in the simulation
+    float orderTick = 10.0f;        // the rate of update of a new order in the market
     int assetStartingPriceCts = 500;
     unsigned int baseStartingQuantity = 1;
     
@@ -35,14 +37,16 @@ public:
     ~Market();
 
 private:
-    // DoTick corresponds to the market simulated tick. All the Update functions are reserved for general app updates
-    void DoTick();
+    // DoTimeTick corresponds to the market time flow update ONLY
+    void DoTimeTick();
+    // DoOrderTick corresponds to the market simulated tick for a new order to happen and NOT SIMULATED TIME FLOW. 
+    void DoOrderTick();
     
-    Order TEMP_CreateNewOrder();
+    Order CreateNewOrder();
 
 public:
     void Update();
 
     OrderBook* GetOrderBook() const;
-    Chart* GetChart() const;
+    std::vector<Order> GetOrders() const;
 };

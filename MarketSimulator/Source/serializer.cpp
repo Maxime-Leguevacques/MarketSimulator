@@ -66,7 +66,7 @@ void Serializer::SaveBar(const std::filesystem::path& _path, const Bar& _bar)
     }
 
     // Bind values from the bar
-    sqlite3_bind_int64(stmt, 1, _bar.t);
+    sqlite3_bind_int64(stmt, 1, _bar.to);
     sqlite3_bind_double(stmt, 2, _bar.o);
     sqlite3_bind_double(stmt, 3, _bar.h);
     sqlite3_bind_double(stmt, 4, _bar.l);

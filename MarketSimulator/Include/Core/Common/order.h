@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ctime>
+
 
 enum EDirection
 {
@@ -17,6 +19,7 @@ enum EType
 class Order
 {
 public:
+    std::time_t epoch;
     unsigned int id;
     EDirection direction;
     EType type;

@@ -19,8 +19,9 @@ App::~App() = default;
 void App::Init()
 {
     market_ = new Market();
+    chart_ = new Chart(market_);
     
-    uiManager_.Init(market_);
+    uiManager_.Init(market_, chart_);
 }
 
 void App::Run()

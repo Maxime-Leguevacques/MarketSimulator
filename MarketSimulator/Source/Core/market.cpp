@@ -6,21 +6,34 @@
 #include "Core/Common/order.h"
 
 
+int seconds = 0;
+
 Market::Market()
 {
     lastUpdate_ = std::chrono::steady_clock::now();
 
     orderBook_ = new OrderBook();
-    chart_ = new Chart();
 }
 
 Market::~Market() = default;
 
-void Market::DoTick()
+void Market::DoOrderTick()
 {
+    const Order order = CreateNewOrder();
+    orders_.push_back(order);
+    // Add to order book
+    orderBook_->AddOrder(order);
+    // Increment order index
+    ocount_++;
 }
 
-Order Market::TEMP_CreateNewOrder()
+void Market::DoTimeTick()
+{
+    seconds++;
+    std::cout << seconds << std::endl;
+}
+
+Order Market::CreateNewOrder()
 {
     Order order(ocount_);
 
@@ -41,27 +54,30 @@ Order Market::TEMP_CreateNewOrder()
 
 void Market::Update()
 {
-    chart_->Update();
-    
     // Update timer to make market grow with tickSpeed
     const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    const std::chrono::duration<float> delta = now - lastUpdate_;
+    const std::chrono::duration<float> cpuDelta = now - lastUpdate_;
     lastUpdate_ = now;
     
     if (isPlaying)
     {
-        timeAccumulator_ += delta.count();
-        const float secondsPerBar = 1.0f / tickSpeed;
+        timeTickAccumulator_ += cpuDelta.count();
+        orderTickAccumulator_ += cpuDelta.count();
         
-        while (timeAccumulator_ >= secondsPerBar)
+        const float deltaTime = 1.0f / timeTick;
+        const float deltaOrder = 1.0f / orderTick;
+        
+        // Time tick
+        while (timeTickAccumulator_ >= deltaTime)
         {
-            Order order = TEMP_CreateNewOrder();
-            // Add to order book
-            orderBook_->AddOrder(order);
-            // Increment order index
-            ocount_++;
-            
-            timeAccumulator_ -= secondsPerBar;
+            DoTimeTick();
+            timeTickAccumulator_ -= deltaTime;
+        }
+        // Order tick
+        while (orderTickAccumulator_ >= deltaOrder)
+        {
+            DoOrderTick();
+            orderTickAccumulator_ -= deltaOrder;
         }
     }
 }
@@ -71,7 +87,7 @@ OrderBook* Market::GetOrderBook() const
     return orderBook_;
 }
 
-Chart* Market::GetChart() const
+std::vector<Order> Market::GetOrders() const
 {
-    return chart_;
+    return orders_;
 }

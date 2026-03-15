@@ -256,15 +256,16 @@ void UiManager::UpdateWindows()
         window->Update();
 }
 
-void UiManager::Init(Market* _market)
+void UiManager::Init(Market* _market, Chart* _chart)
 {
     market_ = _market;
+    chart_ = _chart;
     
     InitWindow();
 
     windows_.push_back(new SimulationSettingsWindow("Simulation Settings", market_));
     windows_.push_back(new OrderBookWindow("Order Book", _market->GetOrderBook()));
-    windows_.push_back(new ChartWindow("Candlestick Chart", _market->GetChart()));
+    windows_.push_back(new ChartWindow("Candlestick Chart", _chart));
 
     InitImGui();
 }
@@ -288,6 +289,7 @@ void UiManager::Run()
         BeginDockSpace();
 
         market_->Update();
+        chart_->Update();
         UpdateWindows();
 
         EndDockSpace();

@@ -28,7 +28,7 @@ void ImplotWrapper::PlotCandlestick(
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // Calculate real value width
     
-    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].t - _bars[0].t) * _widthPercent : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
+    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].to - _bars[0].to) * _widthPercent : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
                                                                                                                                     // So we check if we are on first bar to use that seconds value or not
     #pragma region custom tooltip
     if (ImPlot::IsPlotHovered() && _tooltip)
@@ -49,7 +49,7 @@ void ImplotWrapper::PlotCandlestick(
         {
             ImGui::BeginTooltip();
             char buff[32];
-            ImPlot::FormatDate(ImPlotTime::FromDouble(_bars[idx].t), buff, 32, ImPlotDateFmt_DayMoYr, false);
+            ImPlot::FormatDate(ImPlotTime::FromDouble(_bars[idx].to), buff, 32, ImPlotDateFmt_DayMoYr, false);
             ImGui::Text("Day:   %s", buff);
             ImGui::Text("Open:  $%.2f", _bars[idx].o);
             ImGui::Text("High:  $%.2f", _bars[idx].h);
@@ -69,17 +69,17 @@ void ImplotWrapper::PlotCandlestick(
         if (ImPlot::FitThisFrame())
             for (int i = 0; i < _count; ++i)
             {
-                ImPlot::FitPoint(ImPlotPoint(_bars[i].t, _bars[i].l));
-                ImPlot::FitPoint(ImPlotPoint(_bars[i].t, _bars[i].h));
+                ImPlot::FitPoint(ImPlotPoint(_bars[i].to, _bars[i].l));
+                ImPlot::FitPoint(ImPlotPoint(_bars[i].to, _bars[i].h));
             }
         
         // render data
         for (int i = 0; i < _count; ++i)
         {
-            ImVec2 openPos  = ImPlot::PlotToPixels(_bars[i].t - halfWidth, _bars[i].o);
-            ImVec2 closePos = ImPlot::PlotToPixels(_bars[i].t + halfWidth, _bars[i].c);
-            ImVec2 lowPos   = ImPlot::PlotToPixels(_bars[i].t, _bars[i].l);
-            ImVec2 highPos  = ImPlot::PlotToPixels(_bars[i].t, _bars[i].h);
+            ImVec2 openPos  = ImPlot::PlotToPixels(_bars[i].to - halfWidth, _bars[i].o);
+            ImVec2 closePos = ImPlot::PlotToPixels(_bars[i].to + halfWidth, _bars[i].c);
+            ImVec2 lowPos   = ImPlot::PlotToPixels(_bars[i].to, _bars[i].l);
+            ImVec2 highPos  = ImPlot::PlotToPixels(_bars[i].to, _bars[i].h);
             const ImU32 color = ImGui::GetColorU32(_bars[i].o > _bars[i].c ? _bearCol : _bullCol);
             drawList->AddLine(lowPos, highPos, color);
             drawList->AddRectFilled(openPos, closePos, color);

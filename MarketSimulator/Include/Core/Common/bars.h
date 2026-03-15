@@ -5,7 +5,8 @@
 
 struct Bar
 {
-    uint32_t t;     // epoch time open
+    uint32_t to;    // epoch time open
+    uint32_t tc;    // epoch time close
     float o;        // open price
     float h;        // high price
     float l;        // low price
@@ -17,6 +18,7 @@ struct Bar
     
     constexpr Bar(
         const uint32_t _openTime,
+        const uint32_t _closeTime,
         const float _openPrice,
         const float _highPrice,
         const float _lowPrice,
@@ -24,7 +26,8 @@ struct Bar
         const float _volume,
         const int _numberOfTrades)
     :
-    t(_openTime),
+    to(_openTime),
+    tc(_closeTime),
     o(_openPrice), 
     h(_highPrice), 
     l(_lowPrice), 

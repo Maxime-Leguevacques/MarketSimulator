@@ -12,46 +12,51 @@ ChartWindow::~ChartWindow() = default;
 
 void ChartWindow::Update()
 {
-    static size_t lastBarCount = 0;
-
-    if (chart_->bars_.size() > lastBarCount)
-    {
-        for (size_t i = lastBarCount; i < chart_->bars_.size(); ++i)
-            dates_.push_back(chart_->bars_[i].t);
-
-        lastBarCount = chart_->bars_.size();
-    }
-
-    if (chart_->bars_.empty())
-        return;
-    
     ImGui::Begin(name.c_str());
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("interval");
     ImGui::SameLine();
 
-    // Calculate minimal width needed for combo box
-    const float width = ImGui::CalcTextSize(intervalItems[selectedInterval_]).x + 25;
+    bool intervalChanged = false;
+    
+    // Interval change. Calculate minimal width needed for combo box
+    const float width = ImGui::CalcTextSize(intervalItems[chart_->selectedInterval_]).x + 25;
     ImGui::SetNextItemWidth(width);
-    if (ImGui::Combo("##interval", &selectedInterval_, intervalItems, IM_ARRAYSIZE(intervalItems)))
-        interval = static_cast<EInterval>(selectedInterval_);
+    if (ImGui::Combo("##interval", &chart_->selectedInterval_, intervalItems, IM_ARRAYSIZE(intervalItems)))
+    {
+        chart_->interval = static_cast<EInterval>(chart_->selectedInterval_);
+        dates_.clear();
+        intervalChanged = true;
+    }
+    
+    if (chart_->bars_.empty())
+    {
+        ImGui::End();
+        return;
+    }
+    
+    static size_t lastBarCount = 0;
+    bool newBars = chart_->bars_.size() != lastBarCount;
 
+    if (intervalChanged || newBars)
+    {
+        dates_.resize(chart_->bars_.size());
+
+        for (size_t i = 0; i < chart_->bars_.size(); ++i)
+            dates_[i] = chart_->bars_[i].to;
+        
+        // ImPlot::SetNextAxesToFit();
+    }
+
+    lastBarCount = chart_->bars_.size();
+        
     if (ImPlot::BeginPlot("Candlestick Chart", ImGui::GetContentRegionAvail(), ImPlotFlags_Crosshairs))
     {
         // X axis: time, Y axis: price
         ImPlot::SetupAxes(nullptr, nullptr);
-    
         // Make X-axis a time axis
         ImPlot::SetupAxisScale(ImAxis_X1, ImPlotScale_Time);
-    
-        // Set initial axis limits to show the first N bars (or all loaded bars)
-        const double tStart = chart_->bars_[0].t;
-        const double tEnd = chart_->bars_[0].t + 60*60*24*7;    // show 1 week initially
-        ImPlot::SetupAxisLimits(ImAxis_X1, tStart, tEnd, ImPlotCond_Once);
-    
-        // Set Y-axis limits
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 50, ImPlotCond_Once);
     
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(
@@ -69,16 +74,4 @@ void ChartWindow::Update()
     }
     
     ImGui::End();
-}
-
-int ChartWindow::IntervalToSeconds(const EInterval _interval)
-{
-    switch (interval)
-    {
-    case EInterval::second: return 1;
-    case EInterval::minute: return 60;
-    case EInterval::hour:   return 60 * 60;
-    case EInterval::day:    return 24 * 60 * 60;
-    default:                return 60;
-    }
 }
