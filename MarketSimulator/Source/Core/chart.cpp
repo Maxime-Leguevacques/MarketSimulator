@@ -50,7 +50,6 @@ void Chart::MakeBars(const std::vector<Order>& _orders, const EInterval _interva
             i++;
         }
         
-        // Bar b = Bar(openTime, )
         bars_.push_back({
             static_cast<uint32_t>(openTime),
             static_cast<uint32_t>(closeTime),
@@ -81,17 +80,6 @@ int Chart::IntervalToSeconds(const EInterval _interval) const
 
 void Chart::Update()
 {
-    // if (selectedInterval_ != prevSelectedInterval_)
-    {
-        MakeBars(market_->GetOrders(), interval);
-        prevSelectedInterval_ = selectedInterval_;
-    }
-    
-    // if (bars_.size() >= 1000)    // Just for capping
-        // return;
-
-    // Create new bar
-    // const Bar bar = {idx_, 10.0f, 12.0f, 7.0f, 9.0f, 100.0f, 8};
-    // bars_.push_back(bar);
-    // idx_ += 86400;
+    MakeBars(market_->GetOrders(), interval);
+    prevSelectedInterval_ = selectedInterval_;
 }
