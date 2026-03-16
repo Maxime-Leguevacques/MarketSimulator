@@ -1,7 +1,5 @@
 ﻿#include "Core/matchingEngine.h"
 
-#include <iostream>
-
 
 void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
 {
@@ -20,10 +18,6 @@ void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
         // Then we take the smallest available sell price
         SMatchableOrder& sell = it->second.front();
         
-        std::cout
-            << "Match from BUY order | BUY: " << _incoming.id << " " << _incoming.qty << " "<< _incoming.priceCts 
-            << " -> SELL: " << sell.id << " " << sell.qty << " " << it->first << std::endl;
-
         // Find the traded quantity
         const unsigned int tradedQty = std::min(_incoming.qty, sell.qty);
 
@@ -58,10 +52,6 @@ void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
     {
         // Then we take the smallest available sell price
         SMatchableOrder& buy = it->second.front();
-
-        std::cout
-            << "Match from SELL order | SELL: " << _incoming.id << " " << _incoming.qty << " "<< _incoming.priceCts 
-            << " -> BUY: " << buy.id << " " << buy.qty << " " << it->first << std::endl;
 
         // Find the traded quantity
         const unsigned int tradedQty = std::min(_incoming.qty, buy.qty);

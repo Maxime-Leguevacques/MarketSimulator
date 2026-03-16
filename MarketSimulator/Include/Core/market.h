@@ -23,6 +23,8 @@ private:
     float timeTickAccumulator_ = 0.0f;
     float orderTickAccumulator_ = 0.0f;
 
+    std::time_t startEpoch_;
+    unsigned int seconds_;
     unsigned int ocount_ = 0;    // Temporary variable to store order index
     
 public:

@@ -31,6 +31,33 @@ Order::Order(const unsigned int _id)
     qty = 1;
 }
 
+Order::Order(const std::time_t _time)
+{
+    static std::mt19937 rng(std::random_device{}());
+    static std::uniform_int_distribution dist1(1000, 9999);
+    static std::uniform_int_distribution dist2(0, 1);
+
+    id = dist1(rng);
+    epoch = _time;
+    direction = dist2(rng) == 0 ? EDirection::buy : EDirection::sell;
+    type  = dist2(rng) == 0 ? EType::limit : EType::market;
+    priceCts = 50.0f;
+    qty = 1;
+}
+
+Order::Order(const unsigned int _id, const std::time_t _time)
+{
+    static std::mt19937 rng(std::random_device{}());
+    static std::uniform_int_distribution dist(0, 1);
+
+    id = _id;
+    epoch = _time;
+    direction = dist(rng) == 0 ? EDirection::buy : EDirection::sell;
+    type  = dist(rng) == 0 ? EType::limit : EType::market;
+    priceCts = 0;
+    qty = 1;
+}
+
 Order::~Order() = default;
 
 void Order::Print() const

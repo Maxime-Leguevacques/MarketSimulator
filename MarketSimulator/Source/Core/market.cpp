@@ -6,12 +6,10 @@
 #include "Core/Common/order.h"
 
 
-int seconds = 0;
-
 Market::Market()
 {
     lastUpdate_ = std::chrono::steady_clock::now();
-
+    startEpoch_ = std::time(nullptr);
     orderBook_ = new OrderBook();
 }
 
@@ -29,13 +27,12 @@ void Market::DoOrderTick()
 
 void Market::DoTimeTick()
 {
-    seconds++;
-    std::cout << seconds << std::endl;
+    seconds_++;
 }
 
 Order Market::CreateNewOrder()
 {
-    Order order(ocount_);
+    Order order(ocount_, seconds_);
 
     // Random offset
     std::mt19937 rng(std::random_device{}());
