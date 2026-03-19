@@ -1,15 +1,15 @@
 ﻿#include "Core/matchingEngine.h"
 
 
-void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
+int MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
 {
     if (_orderBook->sells_.empty())
-        return;
+        return -1;
 
     const auto it = _orderBook->sells_.begin();
     // First, we need to check if the incoming order has an opposite order on the same price level or lower
-    if (_incoming.priceCts < it->first)
-        return;
+    if (_incoming.price < it->first)
+        return -1;
 
     // Loop until quantity is gone on one side
     std::queue<SMatchableOrder>& queue = it->second;
@@ -34,17 +34,18 @@ void MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
     if (queue.empty())
         _orderBook->sells_.erase(it);
     
+    return static_cast<int>(_incoming.price);    // Trade occured
 }
 
-void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
+int MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
 {
     if (_orderBook->buys_.empty())
-        return;
+        return -1;
 
     const auto it = _orderBook->buys_.begin();
-    // First, we need to check if the incoming order has an opposite order on the same price level or lower
-    if (_incoming.priceCts > it->first)
-        return;
+    // First, we need to check if the incoming order has an opposite order on the same price level or higher
+    if (_incoming.price > it->first)
+        return -1;
 
     // Loop until quantity is gone on one side
     std::queue<SMatchableOrder>& queue = it->second;
@@ -69,9 +70,10 @@ void MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
     if (queue.empty())
         _orderBook->buys_.erase(it);
     
+    return static_cast<int>(_incoming.price);    // Trade occured
 }
 
-void MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)
+int MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)
 {
     // The following description will describe how to match a buy. It applies by definition in reverse to match a sell.
     //
@@ -89,5 +91,5 @@ void MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)
     // out or not. If not, we keep it, and if it does, we match the remaining quantity of the buy with the next ask in
     // the queue.
     
-    _order.direction == EDirection::buy ? MatchBuy(_orderBook, _order) : MatchSell(_orderBook, _order);
+    return _order.direction == EDirection::buy ? MatchBuy(_orderBook, _order) : MatchSell(_orderBook, _order);
 }

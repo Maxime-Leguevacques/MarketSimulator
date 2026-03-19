@@ -23,7 +23,7 @@ public:
     unsigned int id;
     EDirection direction;
     EType type;
-    unsigned int priceCts;
+    unsigned int price;
     unsigned int qty;
 
 public:

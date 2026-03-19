@@ -19,7 +19,7 @@ void OrderBook::AddSell(const unsigned int _id, const unsigned int _price, const
     sells_[_price].push(mo);
 }
 
-void OrderBook::AddOrder(const Order& _order)
+int OrderBook::AddOrder(const Order& _order)
 {
     newOrders.push(_order);
 
@@ -27,8 +27,8 @@ void OrderBook::AddOrder(const Order& _order)
 
     // Add to order book
     _order.direction == EDirection::buy
-        ? AddBuy(_order.id, _order.priceCts, _order.qty)
-        : AddSell(_order.id, _order.priceCts, _order.qty);
+        ? AddBuy(_order.id, _order.price, _order.qty)
+        : AddSell(_order.id, _order.price, _order.qty);
 
-    MatchingEngine::FindMatch(this, incoming);
+    return MatchingEngine::FindMatch(this, incoming);
 }

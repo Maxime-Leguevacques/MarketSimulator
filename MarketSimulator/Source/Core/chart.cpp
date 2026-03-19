@@ -23,7 +23,7 @@ void Chart::MakeBars(const std::vector<Order>& _orders)
         // Compute close time depending on interval
         const std::time_t closeTime = openTime + 1;
         // Get open price
-        const unsigned int openPrice = _orders[startIdx].priceCts;
+        const unsigned int openPrice = _orders[startIdx].price;
     
         // Prepare variables
         unsigned int highPrice = openPrice;
@@ -37,11 +37,11 @@ void Chart::MakeBars(const std::vector<Order>& _orders)
         {
             const Order& order = _orders[i];
             // Get high price
-            highPrice = std::max<unsigned int>(order.priceCts, highPrice);
+            highPrice = std::max<unsigned int>(order.price, highPrice);
             // Get low price
-            lowPrice = std::min<unsigned int>(order.priceCts, lowPrice);
+            lowPrice = std::min<unsigned int>(order.price, lowPrice);
             // Get close price
-            closePrice = order.priceCts;
+            closePrice = order.price;
             // Get volume
             volume += static_cast<float>(order.qty);
             numberOfTrades++;

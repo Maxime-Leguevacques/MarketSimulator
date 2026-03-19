@@ -265,7 +265,7 @@ void OrderBookWindow::AddOrderToLog(const Order& _order)
     orderLog_.push_front({
         .orderId = _order.id,
         .side = _order.direction,
-        .price = _order.priceCts,
+        .price = _order.price,
         .quantity = _order.qty
     });
 }

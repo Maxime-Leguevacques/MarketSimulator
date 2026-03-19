@@ -14,7 +14,7 @@ Order::Order()
     epoch = std::time(nullptr);
     direction = dist2(rng) == 0 ? EDirection::buy : EDirection::sell;
     type  = dist2(rng) == 0 ? EType::limit : EType::market;
-    priceCts = 50.0f;
+    price = 50.0f;
     qty = 1;
 }
 
@@ -27,7 +27,7 @@ Order::Order(const unsigned int _id)
     epoch = std::time(nullptr);
     direction = dist(rng) == 0 ? EDirection::buy : EDirection::sell;
     type  = dist(rng) == 0 ? EType::limit : EType::market;
-    priceCts = 0;
+    price = 0;
     qty = 1;
 }
 
@@ -41,7 +41,7 @@ Order::Order(const std::time_t _time)
     epoch = _time;
     direction = dist2(rng) == 0 ? EDirection::buy : EDirection::sell;
     type  = dist2(rng) == 0 ? EType::limit : EType::market;
-    priceCts = 50.0f;
+    price = 50.0f;
     qty = 1;
 }
 
@@ -54,7 +54,7 @@ Order::Order(const unsigned int _id, const std::time_t _time)
     epoch = _time;
     direction = dist(rng) == 0 ? EDirection::buy : EDirection::sell;
     type  = dist(rng) == 0 ? EType::limit : EType::market;
-    priceCts = 0;
+    price = 0;
     qty = 1;
 }
 
@@ -66,6 +66,6 @@ void Order::Print() const
     std::cout << "epoch: " << epoch << " | ";
     std::cout << (direction == EDirection::buy ? "buyer" : "seller") << ", "; 
     std::cout << (type == EType::limit ? "limit" : "market") << " -> ";
-    std::cout << "price: " << priceCts << ", ";
+    std::cout << "price: " << price << ", ";
     std::cout << "quantity: " << qty << std::endl;
 }

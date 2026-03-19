@@ -35,5 +35,5 @@ private:
     void AddSell(unsigned int _id, unsigned int _price, unsigned int _qty);
 
 public:
-    void AddOrder(const Order& _order);
+    int AddOrder(const Order& _order);
 };

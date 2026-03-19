@@ -19,7 +19,7 @@ void SimulationSettingsWindow::Update()
     ImGui::SliderFloat("time tick speed", &market_->timeTick, 1.0f, 1000.0f);
     ImGui::SliderFloat("order tick speed", &market_->orderTick, 0.1f, 100.0f);
     
-    ImGui::InputInt("start price", &market_->assetStartingPriceCts);
+    ImGui::InputInt("start price", &market_->assetPrice);
     ImGui::InputScalar("base quantity", ImGuiDataType_U32, &market_->baseStartingQuantity);
     
     if (ImGui::Button("Do Order Tick"))
