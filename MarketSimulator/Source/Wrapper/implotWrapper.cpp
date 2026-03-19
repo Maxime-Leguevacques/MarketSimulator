@@ -28,36 +28,38 @@ void ImplotWrapper::PlotCandlestick(
     ImDrawList* drawList = ImPlot::GetPlotDrawList();
     // Calculate real value width
     
-    const double halfWidth = _count > 1 ? static_cast<float>(_bars[1].to - _bars[0].to) * _widthPercent : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
+    const double halfWidth = _count > 1 
+    ? static_cast<float>(_bars[1].to - _bars[0].to) * _widthPercent 
+    : 86400.0 * _widthPercent;    // ImPlot uses days as x value and there are 86400 seconds in a day.
                                                                                                                                     // So we check if we are on first bar to use that seconds value or not
     #pragma region custom tooltip
-    // if (ImPlot::IsPlotHovered() && _tooltip)
-    // {
-    //     ImPlotPoint mouse       = ImPlot::GetPlotMousePos();
-    //     mouse.x                 = ImPlot::RoundTime(ImPlotTime::FromDouble(mouse.x), ImPlotTimeUnit_Day).ToDouble();
-    //     const float  toolL      = ImPlot::PlotToPixels(mouse.x - halfWidth * 1.5, mouse.y).x;
-    //     const float  toolR      = ImPlot::PlotToPixels(mouse.x + halfWidth * 1.5, mouse.y).x;
-    //     const float  toolT      = ImPlot::GetPlotPos().y;
-    //     const float  toolB      = toolT + ImPlot::GetPlotSize().y;
-    //     ImPlot::PushPlotClipRect();
-    //     drawList->AddRectFilled(ImVec2(toolL, toolT), ImVec2(toolR, toolB), IM_COL32(128,128,128,64));
-    //     ImPlot::PopPlotClipRect();
-    //
-    //     // find mouse location index
-    //     const int idx = FindIndex(_dates, mouse.x);
-    //     if (idx >= 0 && static_cast<size_t>(idx) < _bars.size())
-    //     {
-    //         ImGui::BeginTooltip();
-    //         char buff[32];
-    //         ImPlot::FormatDate(ImPlotTime::FromDouble(_bars[idx].to), buff, 32, ImPlotDateFmt_DayMoYr, false);
-    //         ImGui::Text("Day:   %s", buff);
-    //         ImGui::Text("Open:  $%.2f", _bars[idx].o);
-    //         ImGui::Text("High:  $%.2f", _bars[idx].h);
-    //         ImGui::Text("Low:   $%.2f", _bars[idx].l);
-    //         ImGui::Text("Close: $%.2f", _bars[idx].c);
-    //         ImGui::EndTooltip();
-    //     }
-    // }
+    if (ImPlot::IsPlotHovered() && _tooltip)
+    {
+        ImPlotPoint mouse       = ImPlot::GetPlotMousePos();
+        mouse.x                 = ImPlot::RoundTime(ImPlotTime::FromDouble(mouse.x), ImPlotTimeUnit_Day).ToDouble();
+        const float  toolL      = ImPlot::PlotToPixels(mouse.x - halfWidth * 1.5, mouse.y).x;
+        const float  toolR      = ImPlot::PlotToPixels(mouse.x + halfWidth * 1.5, mouse.y).x;
+        const float  toolT      = ImPlot::GetPlotPos().y;
+        const float  toolB      = toolT + ImPlot::GetPlotSize().y;
+        ImPlot::PushPlotClipRect();
+        drawList->AddRectFilled(ImVec2(toolL, toolT), ImVec2(toolR, toolB), IM_COL32(128,128,128,64));
+        ImPlot::PopPlotClipRect();
+    
+        // find mouse location index
+        const int idx = FindIndex(_dates, mouse.x);
+        if (idx >= 0 && static_cast<size_t>(idx) < _bars.size())
+        {
+            ImGui::BeginTooltip();
+            char buff[32];
+            ImPlot::FormatDate(ImPlotTime::FromDouble(_bars[idx].to), buff, 32, ImPlotDateFmt_DayMoYr, false);
+            ImGui::Text("Day:   %s", buff);
+            ImGui::Text("Open:  $%.2f", _bars[idx].o);
+            ImGui::Text("High:  $%.2f", _bars[idx].h);
+            ImGui::Text("Low:   $%.2f", _bars[idx].l);
+            ImGui::Text("Close: $%.2f", _bars[idx].c);
+            ImGui::EndTooltip();
+        }
+    }
     #pragma endregion custom tooltip
 
     // begin plot item
@@ -82,6 +84,7 @@ void ImplotWrapper::PlotCandlestick(
             ImVec2 highPos  = ImPlot::PlotToPixels(_bars[i].to, _bars[i].h);
             const ImU32 color = ImGui::GetColorU32(_bars[i].o > _bars[i].c ? _bearCol : _bullCol);
             drawList->AddLine(lowPos, highPos, color);
+            drawList->AddRect(openPos, closePos, color);
             drawList->AddRectFilled(openPos, closePos, color);
         }
 

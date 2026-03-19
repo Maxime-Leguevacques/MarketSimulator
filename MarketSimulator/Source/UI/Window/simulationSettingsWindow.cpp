@@ -21,6 +21,14 @@ void SimulationSettingsWindow::Update()
     
     ImGui::InputInt("start price", &market_->assetStartingPriceCts);
     ImGui::InputScalar("base quantity", ImGuiDataType_U32, &market_->baseStartingQuantity);
+    
+    if (ImGui::Button("Do Order Tick"))
+        market_->DoOrderTick();
+    
+    ImGui::SameLine();
+    
+    if (ImGui::Button("Do Time Tick"))
+        market_->DoTimeTick();
 
     ImGui::End();
 }

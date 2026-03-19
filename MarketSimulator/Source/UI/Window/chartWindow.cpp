@@ -20,6 +20,10 @@ void ChartWindow::Update()
         return;
     }
     
+    dates_.resize(chart_->bars_.size());
+    for (size_t i = 0; i < chart_->bars_.size(); ++i)
+        dates_[i] = static_cast<double>(chart_->bars_[i].to) / 86400.0;
+    
     if (ImPlot::BeginPlot("Candlestick Chart", ImGui::GetContentRegionAvail(), ImPlotFlags_Crosshairs))
     {
         // X axis: time, Y axis: price

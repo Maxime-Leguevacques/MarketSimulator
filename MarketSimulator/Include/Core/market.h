@@ -39,16 +39,17 @@ public:
     ~Market();
 
 private:
-    // DoTimeTick corresponds to the market time flow update ONLY
-    void DoTimeTick();
-    // DoOrderTick corresponds to the market simulated tick for a new order to happen and NOT SIMULATED TIME FLOW. 
-    void DoOrderTick();
     
     Order CreateNewOrder();
 
 public:
     void Update();
 
+    // DoTimeTick corresponds to the market time flow update ONLY
+    void DoTimeTick();
+    // DoOrderTick corresponds to the market simulated tick for a new order to happen and NOT SIMULATED TIME FLOW. 
+    void DoOrderTick();
+    
     OrderBook* GetOrderBook() const;
     std::vector<Order> GetOrders() const;
 };

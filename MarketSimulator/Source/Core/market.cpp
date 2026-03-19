@@ -15,21 +15,6 @@ Market::Market()
 
 Market::~Market() = default;
 
-void Market::DoOrderTick()
-{
-    const Order order = CreateNewOrder();
-    orders_.push_back(order);
-    // Add to order book
-    orderBook_->AddOrder(order);
-    // Increment order index
-    ocount_++;
-}
-
-void Market::DoTimeTick()
-{
-    seconds_++;
-}
-
 Order Market::CreateNewOrder()
 {
     Order order(ocount_, seconds_);
@@ -77,6 +62,21 @@ void Market::Update()
             orderTickAccumulator_ -= deltaOrder;
         }
     }
+}
+
+void Market::DoOrderTick()
+{
+    const Order order = CreateNewOrder();
+    orders_.push_back(order);
+    // Add to order book
+    orderBook_->AddOrder(order);
+    // Increment order index
+    ocount_++;
+}
+
+void Market::DoTimeTick()
+{
+    seconds_++;
 }
 
 OrderBook* Market::GetOrderBook() const
