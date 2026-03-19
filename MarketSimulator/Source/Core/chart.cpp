@@ -21,7 +21,7 @@ void Chart::MakeBars(const std::vector<Order>& _orders)
         // Get open time
         const std::time_t openTime = _orders[startIdx].epoch;
         // Compute close time depending on interval
-        const std::time_t closeTime = openTime;
+        const std::time_t closeTime = openTime + 1;
         // Get open price
         const unsigned int openPrice = _orders[startIdx].priceCts;
     

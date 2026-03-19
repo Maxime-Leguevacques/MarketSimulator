@@ -14,45 +14,19 @@ void ChartWindow::Update()
 {
     ImGui::Begin(name.c_str());
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("interval");
-    ImGui::SameLine();
-
-    bool intervalChanged = false;
-    
-    // Interval change. Calculate minimal width needed for combo box
-    const float width = ImGui::CalcTextSize(intervalItems[chart_->selectedInterval_]).x + 25;
-    ImGui::SetNextItemWidth(width);
-    if (ImGui::Combo("##interval", &chart_->selectedInterval_, intervalItems, IM_ARRAYSIZE(intervalItems)))
-    {
-        chart_->interval = static_cast<EInterval>(chart_->selectedInterval_);
-        dates_.clear();
-        intervalChanged = true;
-    }
-    
     if (chart_->bars_.empty())
     {
         ImGui::End();
         return;
     }
     
-    static size_t lastBarCount = 0;
-
-    if (intervalChanged || chart_->bars_.size() != lastBarCount)
-    {
-        dates_.resize(chart_->bars_.size());
-        for (size_t i = 0; i < chart_->bars_.size(); ++i)
-            dates_[i] = chart_->bars_[i].to;
-    }
-
-    lastBarCount = chart_->bars_.size();
-        
     if (ImPlot::BeginPlot("Candlestick Chart", ImGui::GetContentRegionAvail(), ImPlotFlags_Crosshairs))
     {
         // X axis: time, Y axis: price
         ImPlot::SetupAxes(nullptr, nullptr);
         
-        // ImPlot::SetupAxisFormat(ImAxis_X1, );
+        // Make X-axis a time axis
+        ImPlot::SetupAxisScale(ImAxis_X1, ImPlotScale_Time);
 
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(
