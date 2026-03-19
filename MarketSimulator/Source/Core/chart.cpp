@@ -9,21 +9,19 @@ Chart::Chart(Market* _market)
 
 Chart::~Chart() = default;
 
-void Chart::MakeBars(const std::vector<Order>& _orders, const EInterval _interval)
+void Chart::MakeBars(const std::vector<Order>& _orders)
 {
     bars_.clear();
     if (_orders.empty())
         return;
 
-    const int intervalSec = IntervalToSeconds(_interval);
-    
     size_t startIdx = 0;
     while (startIdx < _orders.size())
     {
         // Get open time
         const std::time_t openTime = _orders[startIdx].epoch;
         // Compute close time depending on interval
-        const std::time_t closeTime = openTime + intervalSec;
+        const std::time_t closeTime = openTime;
         // Get open price
         const unsigned int openPrice = _orders[startIdx].priceCts;
     
@@ -66,20 +64,7 @@ void Chart::MakeBars(const std::vector<Order>& _orders, const EInterval _interva
     }
 }
 
-int Chart::IntervalToSeconds(const EInterval _interval) const
-{
-    switch (_interval)
-    {
-    case second: return 1;
-    case minute: return 60;
-    case hour:   return 60 * 60;
-    case day:    return 24 * 60 * 60;
-    }
-    return 60;
-}
-
 void Chart::Update()
 {
-    MakeBars(market_->GetOrders(), interval);
-    prevSelectedInterval_ = selectedInterval_;
+    MakeBars(market_->GetOrders());
 }

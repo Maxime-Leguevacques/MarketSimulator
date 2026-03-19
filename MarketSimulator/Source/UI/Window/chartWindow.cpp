@@ -52,30 +52,8 @@ void ChartWindow::Update()
         // X axis: time, Y axis: price
         ImPlot::SetupAxes(nullptr, nullptr);
         
-        ImPlot::SetupAxisFormat(ImAxis_X1,
-            [](double _value, char* _buff, int _size, void* _userData)
-            {
-                const EInterval interval = *static_cast<EInterval*>(_userData);
-                const double seconds = _value;
-                switch (interval)
-                {
-                case second:
-                    snprintf(_buff, _size, "%.0fs", seconds);
-                    break;
-                case minute:
-                    snprintf(_buff, _size, "%.0fm", seconds / 60.0);
-                    break;
-                case hour:
-                    snprintf(_buff, _size, "%.0fh", seconds / 3600.0);
-                    break;
-                case day:
-                    snprintf(_buff, _size, "%.0fd", seconds / 86400.0);
-                    break;
-                }
-                
-                return 0;
-            }, &chart_->interval);
-    
+        // ImPlot::SetupAxisFormat(ImAxis_X1, );
+
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(
             "TEST",
