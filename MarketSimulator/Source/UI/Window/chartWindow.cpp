@@ -29,9 +29,6 @@ void ChartWindow::Update()
         // X axis: time, Y axis: price
         ImPlot::SetupAxes(nullptr, nullptr);
         
-        // Make X-axis a time axis
-        ImPlot::SetupAxisScale(ImAxis_X1, ImPlotScale_Time);
-
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(
             "TEST",
