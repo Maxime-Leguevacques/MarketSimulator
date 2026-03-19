@@ -37,16 +37,12 @@ void ChartWindow::Update()
     }
     
     static size_t lastBarCount = 0;
-    bool newBars = chart_->bars_.size() != lastBarCount;
 
-    if (intervalChanged || newBars)
+    if (intervalChanged || chart_->bars_.size() != lastBarCount)
     {
         dates_.resize(chart_->bars_.size());
-
         for (size_t i = 0; i < chart_->bars_.size(); ++i)
             dates_[i] = chart_->bars_[i].to;
-        
-        // ImPlot::SetNextAxesToFit();
     }
 
     lastBarCount = chart_->bars_.size();
@@ -55,8 +51,30 @@ void ChartWindow::Update()
     {
         // X axis: time, Y axis: price
         ImPlot::SetupAxes(nullptr, nullptr);
-        // Make X-axis a time axis
-        ImPlot::SetupAxisScale(ImAxis_X1, ImPlotScale_Time);
+        
+        ImPlot::SetupAxisFormat(ImAxis_X1,
+            [](double _value, char* _buff, int _size, void* _userData)
+            {
+                const EInterval interval = *static_cast<EInterval*>(_userData);
+                const double seconds = _value;
+                switch (interval)
+                {
+                case second:
+                    snprintf(_buff, _size, "%.0fs", seconds);
+                    break;
+                case minute:
+                    snprintf(_buff, _size, "%.0fm", seconds / 60.0);
+                    break;
+                case hour:
+                    snprintf(_buff, _size, "%.0fh", seconds / 3600.0);
+                    break;
+                case day:
+                    snprintf(_buff, _size, "%.0fd", seconds / 86400.0);
+                    break;
+                }
+                
+                return 0;
+            }, &chart_->interval);
     
         // Plot candlesticks
         ImplotWrapper::PlotCandlestick(

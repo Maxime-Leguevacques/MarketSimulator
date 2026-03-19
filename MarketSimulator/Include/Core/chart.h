@@ -26,7 +26,7 @@ private:
     Market* market_ = nullptr;
     
     int prevSelectedInterval_ = 0;
-    int selectedInterval_ = 1;
+    int selectedInterval_ = 0;
     
 public:
     EInterval interval = EInterval::second;
