@@ -20,15 +20,15 @@ Order Market::CreateNewOrder()
     Order order(ocount_, seconds_);
 
     // Random offset
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution dist(-1, 5);
-    unsigned int offsetCts = dist(rng);
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution dist(-500, 500);    // +/- 5eur
+    int offset = dist(rng);
 
     // Adapt offset to order direction
     if (order.direction == buy)
-        offsetCts *= -1;
+        offset *= -1;
     
-    order.price = assetPrice + offsetCts;
+    order.price = assetPrice + offset;
     order.qty = baseStartingQuantity;
 
     return order;

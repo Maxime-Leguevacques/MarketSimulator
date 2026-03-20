@@ -31,7 +31,7 @@ public:
     bool isPlaying = false;
     float timeTick = 1.0f;    // the flow of time in the simulation
     float orderTick = 10.0f;        // the rate of update of a new order in the market
-    int assetPrice = 500;
+    int assetPrice = 10000;
     unsigned int baseStartingQuantity = 1;
     
 public:
@@ -40,7 +40,7 @@ public:
 
 private:
     Order CreateNewOrder();
-    void UpdateAssetPrice(const int _price);
+    void UpdateAssetPrice(int _price);
 
 public:
     void Update();

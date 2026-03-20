@@ -27,9 +27,6 @@ public:
     unsigned int qty;
 
 public:
-    Order();
-    Order(unsigned int _id);
-    Order(std::time_t _time);
     Order(unsigned int _id, std::time_t _time);
     ~Order();
 

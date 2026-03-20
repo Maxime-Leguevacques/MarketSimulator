@@ -23,19 +23,6 @@ void OrderBookWindow::Update()
         orderBook_->newOrders.pop();
     }
 
-    #pragma region Basic_buttons
-    if (ImGui::Button("new order"))
-    {
-        const Order order(ocount_);
-        order.Print();
-
-        // Add to order book
-        orderBook_->AddOrder(order);
-        
-        ocount_++;
-    }
-    #pragma endregion Basic_buttons
-
     ImGui::BeginChild("Order book table views", ImVec2(-1, 400), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY);
     if (ImGui::BeginTabBar("OrderBookTabs"))
     {
