@@ -68,7 +68,7 @@ void OrderBookWindow::Update()
                     );
 
                     ImGui::TableSetColumnIndex(2);
-                    ImGui::Text("%u", price);
+                    ImGui::Text("%.2f", static_cast<float>(price) / 100.0f);
 
                     ImGui::TableSetColumnIndex(3);
                     ImGui::Text("%u", quantity);
@@ -120,7 +120,7 @@ void OrderBookWindow::Update()
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::TextColored(ImVec4(1,0,0,1), "%u", it->first);
+                    ImGui::TextColored(ImVec4(1,0,0,1), "%.2f", static_cast<float>(it->first) / 100.0f);
 
                     ImGui::TableSetColumnIndex(1);
                     ImGui::Text("%u", totalQty);
@@ -154,7 +154,7 @@ void OrderBookWindow::Update()
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::TextColored(ImVec4(0,1,0,1), "%u", price);
+                    ImGui::TextColored(ImVec4(0,1,0,1), "%.2f", static_cast<float>(price) / 100.0f);
 
                     ImGui::TableSetColumnIndex(1);
                     ImGui::Text("%u", totalQty);
