@@ -1,6 +1,9 @@
 ﻿#include "Core/matchingEngine.h"
 
 
+Market* MatchingEngine::market_ = nullptr;
+
+
 int MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
 {
     if (_orderBook->sells_.empty())
@@ -18,6 +21,7 @@ int MatchingEngine::MatchBuy(OrderBook* _orderBook, Order& _incoming)
         // Then we take the smallest available sell price
         SMatchableOrder& sell = it->second.front();
         
+        const unsigned int tradePrice = it->first;
         // Find the traded quantity
         const unsigned int tradedQty = std::min(_incoming.qty, sell.qty);
 
@@ -54,6 +58,7 @@ int MatchingEngine::MatchSell(OrderBook* _orderBook, Order& _incoming)
         // Then we take the smallest available sell price
         SMatchableOrder& buy = it->second.front();
 
+        const unsigned int tradePrice = it->first;
         // Find the traded quantity
         const unsigned int tradedQty = std::min(_incoming.qty, buy.qty);
 
@@ -92,4 +97,9 @@ int MatchingEngine::FindMatch(OrderBook* _orderBook, Order& _order)
     // the queue.
     
     return _order.direction == EDirection::buy ? MatchBuy(_orderBook, _order) : MatchSell(_orderBook, _order);
+}
+
+void MatchingEngine::SetMarket(Market* _market)
+{
+    market_ = _market;
 }

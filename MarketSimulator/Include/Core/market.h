@@ -8,7 +8,6 @@
 #include <chrono>
 
 #include "orderBook.h"
-#include "matchingEngine.h"
 
 
 class Market
@@ -17,14 +16,13 @@ private:
     std::vector<Order> orders_;    
     
     OrderBook* orderBook_ = nullptr;
-    MatchingEngine* matchingEngine_ = nullptr;
     
     std::chrono::steady_clock::time_point lastUpdate_;
     float timeTickAccumulator_ = 0.0f;
     float orderTickAccumulator_ = 0.0f;
 
     std::time_t startEpoch_;
-    unsigned int seconds_;
+    unsigned int seconds_ = 0;
     unsigned int ocount_ = 0;    // Temporary variable to store order index
     
 public:

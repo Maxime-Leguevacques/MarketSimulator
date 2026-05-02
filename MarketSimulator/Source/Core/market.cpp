@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 
+#include "Core/matchingEngine.h"
 #include "Core/Common/order.h"
 
 
@@ -11,6 +12,7 @@ Market::Market()
     lastUpdate_ = std::chrono::steady_clock::now();
     startEpoch_ = std::time(nullptr);
     orderBook_ = new OrderBook();
+    MatchingEngine::SetMarket(this);
 }
 
 Market::~Market() = default;
@@ -42,7 +44,6 @@ void Market::UpdateAssetPrice(const int _price)
 
 void Market::Update()
 {
-    std::cout << assetPrice << std::endl;
     // Update timer to make market grow with tickSpeed
     const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
     const std::chrono::duration<float> cpuDelta = now - lastUpdate_;

@@ -1,11 +1,15 @@
 ﻿#pragma once
 
+#include "market.h"
 #include "orderBook.h"
 #include "Common/order.h"
 
 
 class MatchingEngine
 {
+private:
+    static Market* market_;
+    
 public:
     MatchingEngine() = delete;
     ~MatchingEngine() = delete;
@@ -16,4 +20,6 @@ private:
     
 public:
     static int FindMatch(OrderBook* _orderBook, Order& _order);
+    
+    static void SetMarket(Market* _market);
 };

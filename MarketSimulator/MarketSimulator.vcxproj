@@ -211,6 +211,7 @@
     <ClInclude Include="Include\Core\chart.h" />
     <ClInclude Include="Include\Core\Common\bars.h" />
     <ClInclude Include="Include\Core\Common\order.h" />
+    <ClInclude Include="Include\Core\Common\trade.h" />
     <ClInclude Include="Include\Core\market.h" />
     <ClInclude Include="Include\Core\matchingEngine.h" />
     <ClInclude Include="Include\Core\orderBook.h" />
